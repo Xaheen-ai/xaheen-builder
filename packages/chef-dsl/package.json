@@ -1,0 +1,40 @@
+{
+    "name": "@xala/chef-dsl",
+    "version": "0.1.0",
+    "description": "Constrained DSL for Xala Chef Mode - scaffolds, blocks, and helpers",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        },
+        "./blocks": {
+            "types": "./dist/blocks.d.ts",
+            "import": "./dist/blocks.js"
+        }
+    },
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "typecheck": "tsc --noEmit"
+    },
+    "peerDependencies": {
+        "typescript": ">=5.0.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.0"
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "keywords": [
+        "xala",
+        "chef",
+        "dsl",
+        "gazetteer"
+    ],
+    "license": "UNLICENSED"
+}

@@ -13,12 +13,21 @@ import { atom, computed, map } from 'nanostores';
  * When loading the homepage, we set `pageLoadMixedId` to a randomly generated initialId.
  * When loading `/chat`, the user may provide either an initialId or a urlId.
  */
-const pageLoadChatId = atom<string | undefined>(undefined);
+const pageLoadChatId = atom<string | undefined>(import.meta.hot?.data.pageLoadChatId ?? undefined);
+
+// Store in HMR data to persist across reloads
+if (import.meta.hot) {
+  pageLoadChatId.subscribe((value) => {
+    import.meta.hot!.data.pageLoadChatId = value;
+  });
+}
 
 export function setPageLoadChatId(chatId: string) {
   const existing = pageLoadChatId.get();
+  // Allow setting the same value (idempotent) or setting when undefined
   if (existing !== undefined && existing !== chatId) {
-    throw new Error(`pageLoadChatId already set to ${existing} but trying to set to ${chatId}`);
+    // During HMR or React Strict Mode, just update to the new value
+    console.warn(`pageLoadChatId changed from ${existing} to ${chatId} (likely HMR or navigation)`);
   }
   setChefDebugProperty('chatInitialId', chatId);
   pageLoadChatId.set(chatId);

@@ -1,5 +1,6 @@
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { ApiKeyCard } from '~/components/settings/ApiKeyCard';
+import { OAuthCard } from '~/components/settings/OAuthCard';
 import { ThemeCard } from '~/components/settings/ThemeCard';
 import { ProfileCard } from '~/components/settings/ProfileCard';
 import { UsageCard } from '~/components/settings/UsageCard';
@@ -21,6 +22,7 @@ export function SettingsContent() {
           <div className="space-y-6">
             <ProfileCard />
             <UsageCard />
+            <OAuthCard />
             <ApiKeyCard />
             <ThemeCard />
           </div>

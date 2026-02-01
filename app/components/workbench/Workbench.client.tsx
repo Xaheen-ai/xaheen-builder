@@ -25,7 +25,9 @@ import { BackupStatusIndicator } from '~/components/BackupStatusIndicator';
 import type { TerminalInitializationOptions } from '~/types/terminal';
 import { getAbsolutePath } from 'chef-agent/utils/workDir';
 import { PlusIcon, Cross2Icon } from '@radix-ui/react-icons';
-import { CommandLineIcon } from '@heroicons/react/24/outline';
+import { CommandLineIcon, BeakerIcon } from '@heroicons/react/24/outline';
+import { chefModeStore } from '~/lib/stores/chef-mode';
+import { ChefModePreview } from './ChefModePreview';
 
 interface WorkspaceProps {
   chatStarted?: boolean;
@@ -74,6 +76,11 @@ export const Workbench = memo(function Workbench({
   const isSmallViewport = useViewport(1024);
 
   const [previewPanes, setPreviewPanes] = useState<string[]>(() => [randomId()]);
+
+  // Chef Mode state
+  const chefModeState = useStore(chefModeStore.state);
+  const isChefFile = currentDocument?.filePath ? chefModeStore.isChefFile(currentDocument.filePath) : false;
+
 
   const setSelectedView = (view: WorkbenchViewType) => {
     workbenchStore.currentView.set(view);
@@ -148,21 +155,36 @@ export const Workbench = memo(function Workbench({
         },
         ...(showDashboard
           ? [
-              {
-                value: 'dashboard' as const,
-                text: (
-                  <>
-                    <img className="size-4" height="16" width="16" src="/icons/Convex.svg" alt="Convex" />
-                    Database
-                  </>
-                ),
-              },
-            ]
+            {
+              value: 'dashboard' as const,
+              text: (
+                <>
+                  <img className="size-4" height="16" width="16" src="/icons/Convex.svg" alt="Convex" />
+                  Database
+                </>
+              ),
+            },
+          ]
           : []),
       ],
     }),
-    [showDashboard],
+    [showDashboard, isChefFile],
   );
+
+  // Toggle Chef Mode when editing a .chef.ts file
+  useEffect(() => {
+    if (isChefFile && !chefModeState.enabled) {
+      chefModeStore.setEnabled(true);
+    }
+  }, [isChefFile, chefModeState.enabled]);
+
+  // Compile on file open if Chef Mode is active
+  useEffect(() => {
+    if (chefModeState.enabled && isChefFile && currentDocument) {
+      chefModeStore.onFileChanged(currentDocument.filePath, currentDocument.value);
+    }
+  }, [chefModeState.enabled, isChefFile, currentDocument]);
+
 
   // TODO get rid of fileHistory since we don't use it
   const fileHistory = useMemo(() => ({}), []);
@@ -205,6 +227,19 @@ export const Workbench = memo(function Workbench({
                         <CommandLineIcon className="size-4" />
                         Toggle Terminal
                       </PanelHeaderButton>
+                      {isChefFile && (
+                        <PanelHeaderButton
+                          className={classNames('mr-1 text-sm', {
+                            'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300': chefModeState.enabled,
+                          })}
+                          onClick={() => {
+                            chefModeStore.setEnabled(!chefModeState.enabled);
+                          }}
+                        >
+                          <BeakerIcon className="size-4" />
+                          Chef Mode {chefModeState.enabled ? 'ON' : 'OFF'}
+                        </PanelHeaderButton>
+                      )}
                     </div>
                   )}
                   {selectedView === 'preview' && (
@@ -263,6 +298,15 @@ export const Workbench = memo(function Workbench({
                     <View {...slidingPosition({ view: 'dashboard', selectedView, showDashboard })}>
                       <Dashboard />
                     </View>
+                  )}
+                  {chefModeState.enabled && selectedView === 'preview' && isChefFile && (
+                    <div className="absolute inset-0 z-10">
+                      <ChefModePreview
+                        pageSpec={chefModeState.pageSpec}
+                        diagnostics={chefModeState.diagnostics}
+                        isCompiling={chefModeState.isCompiling}
+                      />
+                    </div>
                   )}
                 </div>
               </div>

@@ -28,6 +28,7 @@ import { setupMjsContent } from '~/lib/download/setupMjsContent';
 import type { ConvexProject } from 'chef-agent/types';
 import { cursorRulesContent } from '~/lib/download/cursorRulesContent';
 import type { ConvexToolName } from '~/lib/common/types';
+import { chefModeStore } from './chef-mode';
 
 const { saveAs } = fileSaver;
 
@@ -41,7 +42,7 @@ export interface ArtifactState {
 
 type ArtifactUpdateState = Pick<ArtifactState, 'title' | 'closed'>;
 
-export type WorkbenchViewType = 'code' | 'diff' | 'preview' | 'dashboard';
+export type WorkbenchViewType = 'code' | 'diff' | 'preview' | 'dashboard' | 'chef';
 
 export class WorkbenchStore {
   #previewsStore = new PreviewsStore(webcontainer);
@@ -300,6 +301,10 @@ export class WorkbenchStore {
     newUnsavedFiles.delete(absPath);
 
     this.unsavedFiles.set(newUnsavedFiles);
+
+    // Trigger Chef Mode compilation for .chef.ts files
+    chefModeStore.onFileSaved(absPath, document.value);
+
     // If the file is in the convex/ folder, rerun convex deploy
     if (filePath.startsWith(path.join(WORK_DIR, 'convex'))) {
       await this.#terminalStore.deployFunctionsAndRunDevServer(true);

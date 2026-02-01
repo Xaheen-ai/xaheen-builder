@@ -12,6 +12,22 @@ export const apiKeyValidator = v.object({
   google: v.optional(v.string()),
 });
 
+// Claude OAuth token schema for subscription-based access
+export const claudeOAuthValidator = v.optional(v.object({
+  accessToken: v.string(),
+  refreshToken: v.optional(v.string()),
+  expiresAt: v.number(),
+  sessionId: v.optional(v.string()),
+}));
+
+// Google OAuth token schema for Gemini API access
+export const googleOAuthValidator = v.optional(v.object({
+  accessToken: v.string(),
+  refreshToken: v.optional(v.string()),
+  expiresAt: v.number(),
+  email: v.optional(v.string()),
+}));
+
 // A stable-enough way to store token usage.
 export const usageRecordValidator = v.object({
   completionTokens: v.number(),
@@ -38,6 +54,8 @@ export default defineSchema({
   convexMembers: defineTable({
     tokenIdentifier: v.string(),
     apiKey: v.optional(apiKeyValidator),
+    claudeOAuth: claudeOAuthValidator,
+    googleOAuth: googleOAuthValidator,
     convexMemberId: v.optional(v.string()),
     softDeletedForWorkOSMerge: v.optional(v.boolean()),
     // Not authoritative, just a cache of the user's profile from WorkOS/provision host.

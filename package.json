@@ -6,6 +6,10 @@
   "sideEffects": false,
   "type": "module",
   "version": "0.0.7",
+  "workspaces": [
+    "packages/*",
+    "chef-agent"
+  ],
   "scripts": {
     "deploy": "npm run build",
     "build": "remix vite:build",
