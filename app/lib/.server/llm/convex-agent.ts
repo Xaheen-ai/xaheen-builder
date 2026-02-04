@@ -179,12 +179,44 @@ export async function convexAgent(args: {
       if (provider.useClaudeAgentSdk && provider.claudeOAuthToken) {
         logger.info(`Using Claude Agent SDK for streaming (OAuth token mode, ${planningMode ? 'PLANNING' : 'EXECUTION'} phase)`);
 
-        // Extract last user message as the prompt
-        const lastUserMessage = messages.filter((m) => m.role === 'user').pop();
-        const prompt = lastUserMessage?.content?.toString() || '';
+        // Build prompt with conversation context
+        // In execution mode, we need FULL conversation history so AI knows what plan was approved
+        // In planning mode, just the last user message is fine
+        let prompt: string;
+        if (planningMode) {
+          // Just use last user message for planning
+          const lastUserMessage = messages.filter((m) => m.role === 'user').pop();
+          prompt = lastUserMessage?.content?.toString() || '';
+        } else {
+          // Include FULL conversation history for execution mode
+          // This gives the AI context of the approved plan
+          const conversationHistory = messages.map((m) => {
+            const role = m.role === 'user' ? 'User' : 'Assistant';
+            const content = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
+            return `${role}: ${content}`;
+          }).join('\n\n');
 
-        // Combine system prompts
-        const systemPrompt = `${ROLE_SYSTEM_PROMPT}\n\n${generalSystemPrompt(opts)}`;
+          prompt = `Here is the conversation so far with the approved plan:\n\n${conversationHistory}\n\nNow execute the approved plan. Start building immediately.`;
+        }
+
+        // Combine system prompts - add execution mode context when user has approved
+        const executionModePrefix = planningMode ? '' : `
+⚡ EXECUTION MODE ACTIVE ⚡
+
+The user has already approved the implementation plan. DO NOT ask planning questions.
+DO NOT ask what kind of app they want. DO NOT present another plan.
+
+START BUILDING IMMEDIATELY using the tools available to you:
+- Write files using the Write tool
+- Edit files using the Edit tool  
+- Run commands using the Bash tool
+
+Review the conversation history for the approved plan and BEGIN IMPLEMENTATION NOW.
+
+---
+
+`;
+        const systemPrompt = `${executionModePrefix}${ROLE_SYSTEM_PROMPT}\n\n${generalSystemPrompt(opts)}`;
 
         try {
           let accumulatedText = '';

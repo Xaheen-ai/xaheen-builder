@@ -211,9 +211,18 @@ export function isStillPlanning(messages: Array<{ role: string; content: string 
 
   // AI has presented a plan - now check if user approved
   // Only check messages AFTER the plan was presented
-  const lastAssistantIndex = messages.lastIndexOf(lastAssistantMessage);
+  // NOTE: We use findLastIndex instead of lastIndexOf because we need to compare
+  // message content, not object references (the filtered assistantMessages are different objects)
+  const lastAssistantIndex = messages.findLastIndex(
+    m => m.role === 'assistant' && m.content === lastAssistantMessage.content
+  );
   const messagesAfterPlan = messages.slice(lastAssistantIndex + 1);
+  console.log('  → Last assistant index:', lastAssistantIndex);
   console.log('  → Messages after plan:', messagesAfterPlan.length);
+
+  // Log the user messages after plan for debugging
+  const userMessagesAfterPlan = messagesAfterPlan.filter(m => m.role === 'user');
+  console.log('  → User messages after plan:', userMessagesAfterPlan.map(m => m.content.substring(0, 50)));
 
   const hasApproval = messagesAfterPlan.some(
     msg => msg.role === 'user' && isApprovalMessage(msg.content)
