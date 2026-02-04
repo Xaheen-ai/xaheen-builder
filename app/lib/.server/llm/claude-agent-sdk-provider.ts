@@ -96,7 +96,7 @@ export async function* streamDirectAnthropicResponse(
     oauthToken: string
 ): AsyncGenerator<StreamChunk> {
     const API_URL = 'https://api.anthropic.com/v1/messages';
-    const MODEL = 'claude-sonnet-4-20250514';
+    const MODEL = 'claude-opus-4-5-20250514';
 
     logger.info('🎯 PLANNING MODE: Using direct Anthropic API (no tools, no SDK)');
 
@@ -246,6 +246,13 @@ If you try to use tools, THIS REQUEST WILL FAIL. You MUST respond with text only
             // We do NOT use permissionMode: 'plan' because that triggers Claude's internal
             // planning workflow with <attempt_completion> tags instead of our custom prompt
             tools: enabledTools,
+            // CRITICAL FIX: disallowedTools explicitly blocks specific tools
+            // The SDK ignores tools: [], but respects disallowedTools
+            disallowedTools: planningMode ? [
+                'Read', 'Write', 'Edit', 'MultiEdit', 'Bash', 'Glob', 'Grep', 'LS',
+                'TodoRead', 'TodoWrite', 'WebFetch', 'WebSearch', 'NotebookRead',
+                'NotebookEdit', 'Task', 'Agent', 'AskUser', 'CodeReview'
+            ] : [],
             // Use Chef's custom system prompt directly (plain string, NOT preset)
             // In planning mode, this includes aggressive anti-tool constraints
             systemPrompt: modifiedSystemPrompt,

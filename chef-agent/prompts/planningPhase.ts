@@ -117,12 +117,20 @@ When user says "go", "approved", "yes", "build it", "looks good" → start build
 
 /**
  * Check if a user message indicates approval to proceed
+ * 
+ * CRITICAL: We must distinguish between:
+ * - "yes" as standalone approval → APPROVE
+ * - "yes, I want real-time updates" → answering a question, NOT approval
+ * 
+ * Solution: Only treat as approval if:
+ * 1. Message is very short (< 30 chars) and matches pattern, OR
+ * 2. Message explicitly uses go/proceed/build phrases
  */
 export function isApprovalMessage(message: string): boolean {
-  const approvalPatterns = [
-    /\bapproved?\b/i,
-    /\byes\b/i,
-    /\bgo\b/i,           // "go" - primary approval keyword
+  const trimmed = message.trim().toLowerCase();
+
+  // Explicit approval phrases (can be anywhere in message)
+  const explicitApprovalPatterns = [
     /\bgo ahead\b/i,
     /\bbuild it\b/i,
     /\bproceed\b/i,
@@ -130,11 +138,36 @@ export function isApprovalMessage(message: string): boolean {
     /\blgtm\b/i,
     /\bstart build(ing)?\b/i,
     /\bimplement it\b/i,
-    /\bdo it\b/i,
     /\blet'?s go\b/i,
+    /\bapproved?\b/i,
+    /\bship it\b/i,
   ];
 
-  return approvalPatterns.some(pattern => pattern.test(message.trim()));
+  // If message contains explicit approval phrase, it's approval
+  if (explicitApprovalPatterns.some(pattern => pattern.test(message))) {
+    return true;
+  }
+
+  // Short response patterns (only match if message is short)
+  // This prevents "yes, I want X feature" from being treated as approval
+  const shortApprovalPatterns = [
+    /^yes\.?$/i,
+    /^go\.?$/i,
+    /^ok\.?$/i,
+    /^do it\.?$/i,
+    /^y$/i,
+    /^yep\.?$/i,
+    /^sure\.?$/i,
+  ];
+
+  // Only check short patterns if message is very short (< 30 chars)
+  if (trimmed.length < 30) {
+    if (shortApprovalPatterns.some(pattern => pattern.test(trimmed))) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**

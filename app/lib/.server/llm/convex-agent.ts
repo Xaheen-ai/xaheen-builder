@@ -222,6 +222,14 @@ export async function convexAgent(args: {
                 dataStream.write(formatDataStreamPart('text', cleanText));
               }
             } else if (chunk.type === 'tool_use') {
+              // CRITICAL: In planning mode, ignore ALL tool operations
+              // The SDK ignores disallowedTools and sends tool_use anyway
+              // We must block at the processing level to prevent file creation
+              if (planningMode) {
+                logger.warn(`🛑 PLANNING MODE: Ignoring tool_use ${chunk.tool} - tools disabled until user approval`);
+                continue;
+              }
+
               // Handle SDK tool use events (Write, Edit, Bash, etc.)
               logger.debug(`SDK tool invoked: ${chunk.tool}`, chunk.input);
 
