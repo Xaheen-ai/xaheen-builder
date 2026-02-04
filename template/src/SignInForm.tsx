@@ -2,6 +2,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Button, Textfield, Paragraph, Divider } from "@digdir/designsystemet-react";
 
 export function SignInForm() {
   const { signIn } = useAuthActions();
@@ -9,15 +10,14 @@ export function SignInForm() {
   const [submitting, setSubmitting] = useState(false);
 
   return (
-    <div className="w-full">
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--ds-spacing-4)", width: "100%" }}>
       <form
-        className="flex flex-col gap-form-field"
         onSubmit={(e) => {
           e.preventDefault();
           setSubmitting(true);
           const formData = new FormData(e.target as HTMLFormElement);
           formData.set("flow", flow);
-          void signIn("password", formData).catch((error) => {
+          void signIn("password", formData).catch((error: Error) => {
             let toastTitle = "";
             if (error.message.includes("Invalid password")) {
               toastTitle = "Invalid password. Please try again.";
@@ -32,46 +32,52 @@ export function SignInForm() {
           });
         }}
       >
-        <input
-          className="auth-input-field"
-          type="email"
-          name="email"
-          placeholder="Email"
-          required
-        />
-        <input
-          className="auth-input-field"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-        <button className="auth-button" type="submit" disabled={submitting}>
-          {flow === "signIn" ? "Sign in" : "Sign up"}
-        </button>
-        <div className="text-center text-sm text-secondary">
-          <span>
-            {flow === "signIn"
-              ? "Don't have an account? "
-              : "Already have an account? "}
-          </span>
-          <button
-            type="button"
-            className="text-primary hover:text-primary-hover hover:underline font-medium cursor-pointer"
-            onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
-          >
-            {flow === "signIn" ? "Sign up instead" : "Sign in instead"}
-          </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--ds-spacing-4)" }}>
+          <Textfield
+            type="email"
+            name="email"
+            label="Email"
+            placeholder="Enter your email"
+            required
+          />
+          <Textfield
+            type="password"
+            name="password"
+            label="Password"
+            placeholder="Enter your password"
+            required
+          />
+          <Button type="submit" data-color="accent" disabled={submitting}>
+            {flow === "signIn" ? "Sign in" : "Sign up"}
+          </Button>
         </div>
       </form>
-      <div className="flex items-center justify-center my-3">
-        <hr className="my-4 grow border-gray-200" />
-        <span className="mx-4 text-secondary">or</span>
-        <hr className="my-4 grow border-gray-200" />
+
+      <div style={{ display: "flex", gap: "var(--ds-spacing-2)", alignItems: "center", justifyContent: "center" }}>
+        <Paragraph data-size="sm">
+          {flow === "signIn"
+            ? "Don't have an account?"
+            : "Already have an account?"}
+        </Paragraph>
+        <Button
+          type="button"
+          variant="tertiary"
+          data-size="sm"
+          onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
+        >
+          {flow === "signIn" ? "Sign up instead" : "Sign in instead"}
+        </Button>
       </div>
-      <button className="auth-button" onClick={() => void signIn("anonymous")}>
+
+      <div style={{ display: "flex", gap: "var(--ds-spacing-4)", alignItems: "center" }}>
+        <Divider style={{ flex: 1 }} />
+        <Paragraph data-size="sm">or</Paragraph>
+        <Divider style={{ flex: 1 }} />
+      </div>
+
+      <Button variant="secondary" onClick={() => void signIn("anonymous")}>
         Sign in anonymously
-      </button>
+      </Button>
     </div>
   );
 }

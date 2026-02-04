@@ -9,6 +9,9 @@ import { openaiProxyGuidelines } from './openaiProxyGuidelines.js';
 import { openAi } from './openAi.js';
 import { google } from './google.js';
 import { resendProxyGuidelines } from './resendProxyGuidelines.js';
+import { chefDslGuidelines } from './chefDslGuidelines.js';
+import { platformUiGuidelines } from './platformUiGuidelines.js';
+
 
 // This is the very first part of the system prompt that tells the model what
 // role to play.
@@ -30,6 +33,8 @@ export function generalSystemPrompt(options: SystemPromptOptions) {
   const result = stripIndents`${GENERAL_SYSTEM_PROMPT_PRELUDE}
   ${openAi(options)}
   ${google(options)}
+  ${chefDslGuidelines(options)}
+  ${platformUiGuidelines(options)}
   ${solutionConstraints(options)}
   ${formattingInstructions(options)}
   ${exampleDataInstructions(options)}
@@ -42,3 +47,4 @@ export function generalSystemPrompt(options: SystemPromptOptions) {
   `;
   return result;
 }
+

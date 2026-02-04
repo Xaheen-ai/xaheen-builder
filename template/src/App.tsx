@@ -3,16 +3,45 @@ import { api } from "../convex/_generated/api";
 import { SignInForm } from "./SignInForm";
 import { SignOutButton } from "./SignOutButton";
 import { Toaster } from "sonner";
+import { Heading, Paragraph, Spinner } from "@digdir/designsystemet-react";
 
 export default function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-4">
-        <h2 className="text-xl font-semibold text-primary">Chef</h2>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        background: "var(--ds-color-neutral-background-default)",
+      }}
+    >
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+          height: "4rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0 var(--ds-spacing-4)",
+          borderBottom: "1px solid var(--ds-color-neutral-border-default)",
+          background: "var(--ds-color-neutral-background-default)",
+        }}
+      >
+        <Heading level={2} data-size="md">Chef</Heading>
         <SignOutButton />
       </header>
-      <main className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-md mx-auto">
+      <main
+        style={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "var(--ds-spacing-8)",
+        }}
+      >
+        <div style={{ width: "100%", maxWidth: "28rem" }}>
           <Content />
         </div>
       </main>
@@ -26,23 +55,23 @@ function Content() {
 
   if (loggedInUser === undefined) {
     return (
-      <div className="flex justify-center items-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Spinner aria-label="Loading..." />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-section">
-      <div className="text-center">
-        <h1 className="text-5xl font-bold text-primary mb-4">Cook with Chef</h1>
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--ds-spacing-6)", alignItems: "center" }}>
+      <div style={{ textAlign: "center" }}>
+        <Heading level={1} data-size="2xl">Cook with Chef</Heading>
         <Authenticated>
-          <p className="text-xl text-secondary">
+          <Paragraph data-size="lg">
             Welcome back, {loggedInUser?.email ?? "friend"}!
-          </p>
+          </Paragraph>
         </Authenticated>
         <Unauthenticated>
-          <p className="text-xl text-secondary">Sign in to get started</p>
+          <Paragraph data-size="lg">Sign in to get started</Paragraph>
         </Unauthenticated>
       </div>
 

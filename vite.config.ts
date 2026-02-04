@@ -31,25 +31,25 @@ export default defineConfig((config) => {
     ssr:
       config.command === 'build'
         ? {
-            // noExternal: true,
-            //
-            // Some dependencies are hard to bundler.
-            external: [
-              // the bundler must think this has side effects because I can't
-              // bundle it without problems
-              'cloudflare',
-              // something about eval
-              '@protobufjs/inquire',
-              // doesn't actually help, remove this
-              '@protobufjs/inquire?commonjs-external',
+          // noExternal: true,
+          //
+          // Some dependencies are hard to bundler.
+          external: [
+            // the bundler must think this has side effects because I can't
+            // bundle it without problems
+            'cloudflare',
+            // something about eval
+            '@protobufjs/inquire',
+            // doesn't actually help, remove this
+            '@protobufjs/inquire?commonjs-external',
 
-              // these were guesses to fix a bundling issue, must have
-              // needed at least on of the not to be bundled.
-              '@sentry/remix',
+            // these were guesses to fix a bundling issue, must have
+            // needed at least on of the not to be bundled.
+            '@sentry/remix',
 
-              'vite-plugin-node-polyfills',
-            ],
-          }
+            'vite-plugin-node-polyfills',
+          ],
+        }
         : { noExternal: ['@protobufjs/inquire'] },
     build: {
       // this enabled top-level await

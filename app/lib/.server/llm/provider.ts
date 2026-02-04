@@ -13,6 +13,7 @@ import { getEnv } from '~/lib/.server/env';
 // workaround for Vercel environment from
 // https://github.com/vercel/ai/issues/199#issuecomment-1605245593
 import { fetch } from '~/lib/.server/fetch';
+import { isClaudeOAuthToken, getClaudeOAuthToken } from '~/lib/.server/llm/claude-agent-sdk-provider';
 
 const ALLOWED_AWS_REGIONS = ['us-east-1', 'us-west-2'];
 
@@ -20,6 +21,10 @@ export type ModelProvider = Exclude<ProviderType, 'Unknown'>;
 type Provider = {
   maxTokens: number;
   model: LanguageModelV1;
+  // Flag to indicate that Claude Agent SDK should be used instead of AI SDK
+  useClaudeAgentSdk?: boolean;
+  // OAuth token for Claude Agent SDK
+  claudeOAuthToken?: string;
   options?: {
     xai?: {
       stream_options: { include_usage: true };
@@ -76,13 +81,18 @@ export function getProvider(
     case 'Google': {
       model = modelForProvider(modelProvider, modelChoice);
       let google;
-      if (userApiKey) {
+      const envApiKey = getEnv('GOOGLE_API_KEY');
+      const vertexCredentialsJson = getEnv('GOOGLE_VERTEX_CREDENTIALS_JSON');
+
+      if (userApiKey || (envApiKey && !vertexCredentialsJson)) {
+        // Use Google AI Studio / Gemini API with API key
+        const apiKey = userApiKey || envApiKey;
         google = createGoogleGenerativeAI({
-          apiKey: userApiKey || getEnv('GOOGLE_API_KEY'),
+          apiKey: apiKey!,
           fetch: userApiKey ? userKeyApiFetch('Google') : fetch,
         });
-      } else {
-        const credentials = JSON.parse(getEnv('GOOGLE_VERTEX_CREDENTIALS_JSON')!);
+      } else if (vertexCredentialsJson) {
+        const credentials = JSON.parse(vertexCredentialsJson);
         google = createVertex({
           project: credentials.project_id,
           // Use global endpoint for higher availability
@@ -97,6 +107,10 @@ export function getProvider(
           },
           fetch,
         });
+      } else {
+        throw new Error(
+          'Google provider requires either GOOGLE_API_KEY or GOOGLE_VERTEX_CREDENTIALS_JSON environment variable'
+        );
       }
       provider = {
         model: google(model),
@@ -157,6 +171,35 @@ export function getProvider(
     }
     case 'Anthropic': {
       model = modelForProvider(modelProvider, modelChoice);
+
+      // Feature flag to enable Claude Agent SDK (for OAuth tokens from `claude setup-token`)
+      const ENABLE_CLAUDE_AGENT_SDK = true;
+
+      // Check if user provided an OAuth token (starts with sk-ant-oat01-)
+      const providedOAuthToken = userApiKey && isClaudeOAuthToken(userApiKey) ? userApiKey : null;
+
+      // If OAuth token provided or detected from keychain, use Claude Agent SDK
+      const oauthToken = providedOAuthToken || getClaudeOAuthToken();
+
+      if (ENABLE_CLAUDE_AGENT_SDK && oauthToken) {
+        logger.info('OAuth token detected - will use Claude Agent SDK');
+        // Create a minimal Anthropic provider - the actual call will be handled by Claude Agent SDK
+        const anthropic = createAnthropic({
+          apiKey: 'oauth-placeholder', // Required by SDK but not used
+          fetch: async () => {
+            throw new Error('Claude Agent SDK should be used for OAuth tokens');
+          },
+        });
+
+        provider = {
+          model: anthropic(model),
+          maxTokens: anthropicMaxTokens(modelChoice),
+          useClaudeAgentSdk: true,
+          claudeOAuthToken: oauthToken,
+        };
+        break;
+      }
+
       // Falls back to the low Quality-of-Service Anthropic API key if the primary key is rate limited
       const rateLimitAwareFetch = () => {
         return async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -207,9 +250,21 @@ export function getProvider(
           return throwIfBad(lowQosResponse, true);
         };
       };
+
+      // Choose fetch function based on token type
+      let fetchFn;
+      let apiKey: string;
+      if (userApiKey) {
+        fetchFn = userKeyApiFetch('Anthropic');
+        apiKey = userApiKey;
+      } else {
+        fetchFn = rateLimitAwareFetch();
+        apiKey = getEnv('ANTHROPIC_API_KEY') || '';
+      }
+
       const anthropic = createAnthropic({
-        apiKey: userApiKey || getEnv('ANTHROPIC_API_KEY'),
-        fetch: userApiKey ? userKeyApiFetch('Anthropic') : rateLimitAwareFetch(),
+        apiKey,
+        fetch: fetchFn,
       });
 
       provider = {

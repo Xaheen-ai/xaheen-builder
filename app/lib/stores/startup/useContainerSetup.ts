@@ -23,7 +23,7 @@ import { chatSyncState } from './chatSyncState';
 import { FILE_EVENTS_DEBOUNCE_MS } from '~/lib/stores/files';
 import { setChefDebugProperty } from 'chef-agent/utils/chefDebug';
 
-const TEMPLATE_URL = '/template-snapshot-342e2b07.bin';
+const TEMPLATE_URL = '/template-snapshot-10a171e2.bin';
 
 export function useNewChatContainerSetup() {
   const convex = useConvex();
@@ -137,7 +137,18 @@ async function initializeFileSystemBackup() {
 }
 
 async function setupConvexEnvVars(webcontainer: WebContainer, convexProject: ConvexProject) {
-  const { token } = convexProject;
+  const { token, deploymentUrl } = convexProject;
+
+  // Set VITE_CONVEX_URL for the React client
+  await appendEnvVarIfNotSet({
+    envFilePath: '.env.local',
+    readFile: (path) => webcontainer.fs.readFile(path, 'utf-8'),
+    writeFile: (path, content) => webcontainer.fs.writeFile(path, content),
+    envVarName: 'VITE_CONVEX_URL',
+    value: deploymentUrl,
+  });
+
+  // Set CONVEX_DEPLOY_KEY for deployments
   await appendEnvVarIfNotSet({
     envFilePath: '.env.local',
     readFile: (path) => webcontainer.fs.readFile(path, 'utf-8'),

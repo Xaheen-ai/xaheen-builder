@@ -153,7 +153,15 @@ export function solutionConstraints(options: SystemPromptOptions) {
         );
         \`\`\`
 
-        If you want to use a UI element, you MUST create it. DO NOT use external libraries like Shadcn/UI.
+        IMPORTANT: Prefer using Chef DSL (\`.chef.ts\` files) for pages. The DSL compiles to platform-ui
+        components and enforces design system compliance.
+        
+        If you MUST write raw React components:
+        - DO NOT use external libraries like Shadcn/UI, Material-UI, or Chakra
+        - DO NOT use Tailwind classes (\`className="..."\`)
+        - DO NOT use inline styles (\`style={{...}}\`)
+        - Use semantic HTML elements that will be replaced by platform-ui components
+
 
         When writing a UI component and you want to use a Convex function, you MUST import the \`api\` object. For example:
 
@@ -184,9 +192,22 @@ function templateInfo() {
     installed in the 'node_modules' directory. You MUST use this template. This template uses the following
     technologies:
     - Vite + React for the frontend
-    - TailwindCSS for styling
+    - @digdir/designsystemet-react for UI components (Button, Textfield, Heading, Paragraph, Spinner, Divider, etc.)
+    - @digdir/designsystemet-css with /theme for styling
+    - @fontsource/inter for Inter font (recommended by Designsystemet)
     - Convex for the database, functions, scheduling, HTTP handlers, and search.
     - Convex Auth for authentication.
+
+    CRITICAL UI RULES (Designsystemet):
+    - ALWAYS import components from '@digdir/designsystemet-react'
+    - Use Designsystemet components for all UI (Button, Textfield, Heading, Paragraph, Spinner, Divider, etc.)
+    - NEVER use raw HTML elements like <div>, <button>, <input> - use components instead
+    - NEVER use Tailwind CSS classes or className prop for styling
+    - Use design tokens for custom styles: \`var(--ds-spacing-4)\`, \`var(--ds-color-neutral-background-default)\`
+    - Use data attributes for variants: \`data-size="md"\`, \`data-color="accent"\`
+    - For layouts, use inline styles with design tokens or component composition
+    - Font is already configured (Inter via @fontsource/inter)
+
 
     Here are some important files within the template:
 

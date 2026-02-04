@@ -10,6 +10,7 @@ import {
   type ProviderMetadata,
   type StepResult,
 } from 'ai';
+import { formatDataStreamPart } from 'ai';
 import { ROLE_SYSTEM_PROMPT, generalSystemPrompt } from 'chef-agent/prompts/system';
 import { deployTool } from 'chef-agent/tools/deploy';
 import { viewTool } from 'chef-agent/tools/view';
@@ -36,6 +37,7 @@ import { lookupDocsTool } from 'chef-agent/tools/lookupDocs';
 import { addEnvironmentVariablesTool } from 'chef-agent/tools/addEnvironmentVariables';
 import { getConvexDeploymentNameTool } from 'chef-agent/tools/getConvexDeploymentName';
 import type { PromptCharacterCounts } from 'chef-agent/ChatContextManager';
+import { streamClaudeAgentResponse } from '~/lib/.server/llm/claude-agent-sdk-provider';
 
 type Messages = Message[];
 
@@ -135,7 +137,82 @@ export async function convexAgent(args: {
   }
 
   const dataStream = createDataStream({
-    execute(dataStream) {
+    async execute(dataStream) {
+      // Check if we should use Claude Agent SDK (for OAuth token)
+      if (provider.useClaudeAgentSdk && provider.claudeOAuthToken) {
+        logger.info('Using Claude Agent SDK for streaming (OAuth token mode)');
+
+        // Extract last user message as the prompt
+        const lastUserMessage = messages.filter((m) => m.role === 'user').pop();
+        const prompt = lastUserMessage?.content?.toString() || '';
+
+        // Combine system prompts
+        const systemPrompt = `${ROLE_SYSTEM_PROMPT}\n\n${generalSystemPrompt(opts)}`;
+
+        try {
+          let accumulatedText = '';
+          let usage = { promptTokens: 0, completionTokens: 0 };
+
+          for await (const chunk of streamClaudeAgentResponse(
+            prompt,
+            systemPrompt,
+            provider.claudeOAuthToken
+          )) {
+            if (firstResponseTime === null) {
+              firstResponseTime = Date.now();
+              const timeToFirstResponse = firstResponseTime - startTime;
+              if (tracer) {
+                const span = tracer.startSpan('first-response');
+                span.setAttribute('chatInitialId', chatInitialId);
+                span.setAttribute('timeToFirstResponse', timeToFirstResponse);
+                span.setAttribute('provider', 'Claude Agent SDK');
+                span.end();
+              }
+              console.log('First response metrics:', {
+                timeToFirstResponse: `${timeToFirstResponse}ms`,
+                provider: 'Claude Agent SDK',
+                chatInitialId,
+              });
+            }
+
+            if (chunk.type === 'text') {
+              accumulatedText += chunk.text;
+              // Use formatDataStreamPart to properly format text for the stream
+              dataStream.write(formatDataStreamPart('text', chunk.text));
+            } else if (chunk.type === 'done') {
+              usage = chunk.usage;
+            }
+          }
+
+          // Record usage
+          await recordUsageCb(messages[messages.length - 1], {
+            usage: {
+              promptTokens: usage.promptTokens,
+              completionTokens: usage.completionTokens,
+              totalTokens: usage.promptTokens + usage.completionTokens,
+            },
+          });
+
+          // Write final message annotation
+          const usageAnnotation = encodeUsageAnnotation(
+            { kind: 'final' },
+            {
+              promptTokens: usage.promptTokens,
+              completionTokens: usage.completionTokens,
+              totalTokens: usage.promptTokens + usage.completionTokens,
+            },
+            undefined
+          );
+          dataStream.writeMessageAnnotation({ type: 'usage', usage: usageAnnotation });
+        } catch (error) {
+          logger.error('Claude Agent SDK streaming error:', error);
+          throw error;
+        }
+
+        return;
+      }
+
+      // Standard AI SDK path
       const result = streamText({
         model: provider.model,
         maxTokens: provider.maxTokens,

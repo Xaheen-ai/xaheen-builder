@@ -29,6 +29,7 @@ export type ModelSelection =
   | 'claude-3-5-haiku'
   | 'claude-4-sonnet'
   | 'claude-4.5-sonnet'
+  | 'claude-4-opus'
   | 'gpt-4.1'
   | 'gpt-4.1-mini'
   | 'gpt-5'

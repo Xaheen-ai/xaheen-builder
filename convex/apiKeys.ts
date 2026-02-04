@@ -13,7 +13,30 @@ export const apiKeyForCurrentMember = query({
     }
     const existingMember = await getMemberByConvexMemberIdQuery(ctx, identity).first();
 
-    return existingMember?.apiKey;
+    if (!existingMember) {
+      return null;
+    }
+
+    // Get the base API key config
+    let apiKey = existingMember.apiKey;
+
+    // Check if user has a Claude OAuth token that can be used as anthropic key fallback
+    // Use type assertion since claudeOAuth may not be in schema yet
+    const memberData = existingMember as typeof existingMember & {
+      claudeOAuth?: { accessToken: string; expiresAt: number };
+    };
+
+    if (memberData.claudeOAuth && memberData.claudeOAuth.expiresAt > Date.now()) {
+      // If user has valid Claude OAuth token but no manual Anthropic API key, use OAuth token
+      if (!apiKey?.value) {
+        apiKey = {
+          ...(apiKey || { preference: 'quotaExhausted' as const }),
+          value: memberData.claudeOAuth.accessToken,
+        };
+      }
+    }
+
+    return apiKey;
   },
 });
 

@@ -200,6 +200,7 @@ export const Chat = memo(
           auto: { providerName: 'anthropic', apiKeyField: 'value' },
           'claude-4-sonnet': { providerName: 'anthropic', apiKeyField: 'value' },
           'claude-4.5-sonnet': { providerName: 'anthropic', apiKeyField: 'value' },
+          'claude-4-opus': { providerName: 'anthropic', apiKeyField: 'value' },
           'gpt-4.1': { providerName: 'openai', apiKeyField: 'openai' },
           'gpt-5': { providerName: 'openai', apiKeyField: 'openai' },
           'grok-3-mini': { providerName: 'xai', apiKeyField: 'xai' },
@@ -310,6 +311,9 @@ export const Chat = memo(
         } else if (modelSelection === 'claude-4.5-sonnet') {
           modelProvider = 'Anthropic';
           modelChoice = 'claude-sonnet-4-5';
+        } else if (modelSelection === 'claude-4-opus') {
+          modelProvider = 'Anthropic';
+          modelChoice = 'claude-opus-4';
         } else if (modelSelection === 'grok-3-mini') {
           modelProvider = 'XAI';
         } else if (modelSelection === 'gemini-2.5-pro') {
@@ -537,11 +541,11 @@ export const Chat = memo(
         const maybeRelevantFilesMessage: UIMessage = shouldSendRelevantFiles
           ? chatContextManager.current.relevantFiles(messages, `${Date.now()}`, maxRelevantFilesSize)
           : {
-              id: `${Date.now()}`,
-              content: '',
-              role: 'user',
-              parts: [],
-            };
+            id: `${Date.now()}`,
+            content: '',
+            role: 'user',
+            parts: [],
+          };
 
         // Make a clone of the relevantFilesMessage so we can inject the modified message after relevant files before the messageInput later
         const newMessage = structuredClone(maybeRelevantFilesMessage);

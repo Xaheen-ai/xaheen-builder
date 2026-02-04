@@ -88,6 +88,12 @@ export const models: Partial<
     recommended: false,
     requireKey: false,
   },
+  'claude-4-opus': {
+    name: 'Claude 4 Opus',
+    provider: 'anthropic',
+    recommended: false,
+    requireKey: false,
+  },
   'gemini-2.5-pro': {
     name: 'Gemini 2.5 Pro',
     recommended: false,
