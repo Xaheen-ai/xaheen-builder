@@ -38,6 +38,27 @@ import { addEnvironmentVariablesTool } from 'chef-agent/tools/addEnvironmentVari
 import { getConvexDeploymentNameTool } from 'chef-agent/tools/getConvexDeploymentName';
 import type { PromptCharacterCounts } from 'chef-agent/ChatContextManager';
 import { streamClaudeAgentResponse } from '~/lib/.server/llm/claude-agent-sdk-provider';
+import { isStillPlanning } from 'chef-agent/prompts/planningPhase';
+
+/**
+ * Filter out Claude SDK internal XML tags that appear when SDK is in plan mode
+ * These tags are internal to the SDK and should not be shown to users
+ */
+function filterInternalXmlTags(text: string): string {
+  // Remove SDK internal XML tags and their content
+  const patterns = [
+    /<attempt_completion>[\s\S]*?<\/attempt_completion>/gi,
+    /<anthropic_sub_agent>[\s\S]*?<\/anthropic_sub_agent>/gi,
+    /<agent_type>[\s\S]*?<\/agent_type>/gi,
+    /<\/agent_type>/gi,
+    /<\/attempt_completion>/gi,
+  ];
+  let filtered = text;
+  for (const pattern of patterns) {
+    filtered = filtered.replace(pattern, '');
+  }
+  return filtered;
+}
 
 type Messages = Message[];
 
@@ -83,6 +104,20 @@ export async function convexAgent(args: {
 
   const startTime = Date.now();
   let firstResponseTime: number | null = null;
+
+  // Check if we're still in planning phase (no user approval yet)
+  // This applies to BOTH Claude Agent SDK and regular AI SDK paths
+  const messageHistory = messages.map((m) => ({
+    role: m.role,
+    content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content),
+  }));
+  const planningMode = isStillPlanning(messageHistory);
+
+  // Log planning mode status
+  logger.info(planningMode
+    ? '🎯 PLANNING MODE: User has not approved - tools will be disabled'
+    : '🚀 EXECUTION MODE: User has approved - tools enabled'
+  );
 
   const provider = getProvider(userApiKey, modelProvider, modelChoice);
   const opts: SystemPromptOptions = {
@@ -139,8 +174,10 @@ export async function convexAgent(args: {
   const dataStream = createDataStream({
     async execute(dataStream) {
       // Check if we should use Claude Agent SDK (for OAuth token)
+      // NOTE: OAuth tokens ONLY work with Claude Agent SDK, not standard Anthropic API
+      // During planning mode, we'll filter out internal XML tags from SDK output
       if (provider.useClaudeAgentSdk && provider.claudeOAuthToken) {
-        logger.info('Using Claude Agent SDK for streaming (OAuth token mode)');
+        logger.info(`Using Claude Agent SDK for streaming (OAuth token mode, ${planningMode ? 'PLANNING' : 'EXECUTION'} phase)`);
 
         // Extract last user message as the prompt
         const lastUserMessage = messages.filter((m) => m.role === 'user').pop();
@@ -156,7 +193,8 @@ export async function convexAgent(args: {
           for await (const chunk of streamClaudeAgentResponse(
             prompt,
             systemPrompt,
-            provider.claudeOAuthToken
+            provider.claudeOAuthToken,
+            planningMode  // Pass planning mode to disable tools until approval
           )) {
             if (firstResponseTime === null) {
               firstResponseTime = Date.now();
@@ -176,9 +214,36 @@ export async function convexAgent(args: {
             }
 
             if (chunk.type === 'text') {
-              accumulatedText += chunk.text;
-              // Use formatDataStreamPart to properly format text for the stream
-              dataStream.write(formatDataStreamPart('text', chunk.text));
+              // Filter out internal XML tags during planning mode
+              const cleanText = planningMode ? filterInternalXmlTags(chunk.text) : chunk.text;
+              if (cleanText) {
+                accumulatedText += cleanText;
+                // Use formatDataStreamPart to properly format text for the stream
+                dataStream.write(formatDataStreamPart('text', cleanText));
+              }
+            } else if (chunk.type === 'tool_use') {
+              // Handle SDK tool use events (Write, Edit, Bash, etc.)
+              logger.debug(`SDK tool invoked: ${chunk.tool}`, chunk.input);
+
+              // Translate SDK tools to Chef artifact format
+              if (chunk.tool === 'Write' && chunk.input?.['path']) {
+                const path = chunk.input['path'] as string;
+                const content = chunk.input['content'] as string || '';
+                dataStream.writeData({
+                  type: 'artifact',
+                  artifact: { filePath: path, content, type: 'file' }
+                });
+              } else if (chunk.tool === 'Edit' && chunk.input?.['path']) {
+                const path = chunk.input['path'] as string;
+                dataStream.writeData({
+                  type: 'artifact',
+                  artifact: { filePath: path, type: 'edit' }
+                });
+              } else if (chunk.tool === 'Bash' && chunk.input?.['command']) {
+                const command = chunk.input['command'] as string;
+                logger.info(`SDK running Bash: ${command.substring(0, 100)}...`);
+                // Could emit command status to UI if needed
+              }
             } else if (chunk.type === 'done') {
               usage = chunk.usage;
             }
@@ -216,10 +281,13 @@ export async function convexAgent(args: {
       const result = streamText({
         model: provider.model,
         maxTokens: provider.maxTokens,
+        maxSteps: 10, // Enable multi-step tool execution
         providerOptions: provider.options,
         messages: messagesForDataStream,
         tools,
-        toolChoice: shouldDisableTools ? 'none' : 'auto',
+        // Tool choice: disabled during planning phase OR if shouldDisableTools flag is set
+        // Planning mode = no approval from user yet, so must ask questions first
+        toolChoice: (planningMode || shouldDisableTools) ? 'none' : 'auto',
         onFinish: (result) => {
           onFinishHandler({
             dataStream,

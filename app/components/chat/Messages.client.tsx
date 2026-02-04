@@ -1,5 +1,5 @@
 import type { Message } from 'ai';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useCallback, useState, useMemo } from 'react';
 import { classNames } from '~/utils/classNames';
 import { AssistantMessage } from './AssistantMessage';
 import { UserMessage } from './UserMessage';
@@ -15,6 +15,13 @@ import { Button } from '@ui/Button';
 import { Modal } from '@ui/Modal';
 import { useEarliestRewindableMessageRank } from '~/lib/hooks/useEarliestRewindableMessageRank';
 import { subchatIndexStore } from '~/lib/stores/subchats';
+import {
+  PlanningQuestions,
+  parsePlanningQuestions,
+  formatSelectionsAsMessage,
+  getDefaultSelections,
+} from './PlanningQuestions';
+import { QuickApprovalButtons, detectPlanInMessage } from './QuickApprovalButtons';
 
 interface MessagesProps {
   id?: string;
@@ -23,10 +30,11 @@ interface MessagesProps {
   messages?: Message[];
   subchatsLength?: number;
   onRewindToMessage?: (subchatIndex?: number, messageIndex?: number) => void;
+  onQuestionResponse?: (response: string) => void;
 }
 
 export const Messages = forwardRef<HTMLDivElement, MessagesProps>(function Messages(
-  { id, isStreaming = false, messages = [], className, onRewindToMessage, subchatsLength }: MessagesProps,
+  { id, isStreaming = false, messages = [], className, onRewindToMessage, subchatsLength, onQuestionResponse }: MessagesProps,
   ref: ForwardedRef<HTMLDivElement> | undefined,
 ) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +50,73 @@ export const Messages = forwardRef<HTMLDivElement, MessagesProps>(function Messa
   const profile = useStore(profileStore);
   const earliestRewindableMessageRank = useEarliestRewindableMessageRank();
   const lastSubchatIndex = subchatsLength ? subchatsLength - 1 : undefined;
+
+  // Detect planning questions in the last assistant message
+  const { planningQuestions, lastAssistantIndex } = useMemo(() => {
+    // Find last assistant message
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const msg = messages[i];
+      if (msg.role === 'assistant' && msg.content) {
+        const questions = parsePlanningQuestions(msg.content);
+        if (questions) {
+          return { planningQuestions: questions, lastAssistantIndex: i };
+        }
+        break; // Only check the last assistant message
+      }
+    }
+    return { planningQuestions: null, lastAssistantIndex: -1 };
+  }, [messages]);
+
+  // Handle question submissions
+  const handleQuestionSubmit = useCallback((selections: Record<string, string[]>) => {
+    if (planningQuestions && onQuestionResponse) {
+      const message = formatSelectionsAsMessage(planningQuestions, selections);
+      onQuestionResponse(message);
+    }
+  }, [planningQuestions, onQuestionResponse]);
+
+  const handleUseDefaults = useCallback(() => {
+    if (planningQuestions && onQuestionResponse) {
+      const defaults = getDefaultSelections(planningQuestions);
+      const message = formatSelectionsAsMessage(planningQuestions, defaults);
+      onQuestionResponse(message);
+    }
+  }, [planningQuestions, onQuestionResponse]);
+
+  const handleSkip = useCallback(() => {
+    if (onQuestionResponse) {
+      onQuestionResponse('Skip questions and build with recommended defaults');
+    }
+  }, [onQuestionResponse]);
+
+  // Detect if the last assistant message contains a plan (needs approval)
+  const { hasPlan, planMessageIndex } = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const msg = messages[i];
+      if (msg.role === 'assistant' && msg.content && detectPlanInMessage(msg.content)) {
+        // Check if there's already a user response after this plan
+        const hasUserResponseAfter = messages.slice(i + 1).some(m => m.role === 'user');
+        if (!hasUserResponseAfter) {
+          return { hasPlan: true, planMessageIndex: i };
+        }
+      }
+      if (msg.role === 'assistant') break; // Only check the last assistant message
+    }
+    return { hasPlan: false, planMessageIndex: -1 };
+  }, [messages]);
+
+  // Handle approval button clicks
+  const handleApprove = useCallback(() => {
+    if (onQuestionResponse) {
+      onQuestionResponse('go');
+    }
+  }, [onQuestionResponse]);
+
+  const handleModify = useCallback(() => {
+    if (onQuestionResponse) {
+      onQuestionResponse('I want to modify the plan. Can you adjust it?');
+    }
+  }, [onQuestionResponse]);
 
   return (
     <div id={id} className={className} ref={ref}>
@@ -121,7 +196,29 @@ export const Messages = forwardRef<HTMLDivElement, MessagesProps>(function Messa
                   )}
                 </div>
               )}
-              {isUserMessage ? <UserMessage content={content} /> : <AssistantMessage message={message} />}
+              {isUserMessage ? (
+                <UserMessage content={content} />
+              ) : (
+                <>
+                  <AssistantMessage message={message} />
+                  {/* Show interactive questions for the last assistant message */}
+                  {index === lastAssistantIndex && planningQuestions && onQuestionResponse && !isStreaming && (
+                    <PlanningQuestions
+                      questions={planningQuestions}
+                      onSubmit={handleQuestionSubmit}
+                      onUseDefaults={handleUseDefaults}
+                      onSkip={handleSkip}
+                    />
+                  )}
+                  {/* Show approval buttons when AI presents a plan */}
+                  {index === planMessageIndex && hasPlan && !planningQuestions && onQuestionResponse && !isStreaming && (
+                    <QuickApprovalButtons
+                      onApprove={handleApprove}
+                      onModify={handleModify}
+                    />
+                  )}
+                </>
+              )}
               <div>
                 {earliestRewindableMessageRank !== undefined &&
                   earliestRewindableMessageRank !== null &&

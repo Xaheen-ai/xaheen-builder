@@ -11,6 +11,7 @@ import { google } from './google.js';
 import { resendProxyGuidelines } from './resendProxyGuidelines.js';
 import { chefDslGuidelines } from './chefDslGuidelines.js';
 import { platformUiGuidelines } from './platformUiGuidelines.js';
+import { planningPhasePrompt } from './planningPhase.js';
 
 
 // This is the very first part of the system prompt that tells the model what
@@ -31,6 +32,7 @@ export function generalSystemPrompt(options: SystemPromptOptions) {
   // otherwise it will not be cached. We assume this string is the *last* message we want to cache.
   // See app/lib/.server/llm/provider.ts
   const result = stripIndents`${GENERAL_SYSTEM_PROMPT_PRELUDE}
+  ${planningPhasePrompt(options)}
   ${openAi(options)}
   ${google(options)}
   ${chefDslGuidelines(options)}

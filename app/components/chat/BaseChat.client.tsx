@@ -201,6 +201,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                             isStreaming={isStreaming}
                             onRewindToMessage={onRewindToMessage}
                             subchatsLength={subchats?.length}
+                            onQuestionResponse={onSend}
                           />
                         </motion.div>
                       </AnimatePresence>
