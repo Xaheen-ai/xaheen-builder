@@ -1,0 +1,325 @@
+{
+    "common": {
+        "loading": "جاري التحميل...",
+        "error": "حدث خطأ",
+        "retry": "إعادة المحاولة",
+        "save": "حفظ",
+        "cancel": "إلغاء",
+        "delete": "حذف",
+        "edit": "تعديل",
+        "create": "إنشاء",
+        "search": "بحث",
+        "noResults": "لم يتم العثور على نتائج",
+        "confirm": "تأكيد",
+        "close": "إغلاق",
+        "back": "رجوع",
+        "next": "التالي",
+        "previous": "السابق",
+        "yes": "نعم",
+        "no": "لا",
+        "skipToMain": "انتقل إلى المحتوى الرئيسي",
+        "skipToNav": "انتقل إلى التنقل",
+        "showMore": "عرض المزيد",
+        "showLess": "عرض أقل"
+    },
+    "auth": {
+        "signIn": "تسجيل الدخول",
+        "signOut": "تسجيل الخروج",
+        "signUp": "إنشاء حساب",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "forgotPassword": "نسيت كلمة المرور؟",
+        "resetPassword": "إعادة تعيين كلمة المرور"
+    },
+    "errors": {
+        "required": "هذا الحقل مطلوب",
+        "invalidEmail": "عنوان بريد إلكتروني غير صالح",
+        "networkError": "خطأ في الشبكة",
+        "unauthorized": "غير مصرح",
+        "notFound": "غير موجود",
+        "serverError": "خطأ في الخادم",
+        "loadingFailed": "تعذر تحميل البيانات"
+    },
+    "validation": {
+        "minLength": "يجب أن يكون {{min}} أحرف على الأقل",
+        "maxLength": "لا يمكن أن يكون أكثر من {{max}} حرف",
+        "pattern": "تنسيق غير صالح"
+    },
+    "action": {
+        "search": "بحث...",
+        "save": "حفظ",
+        "book": "احجز الآن",
+        "login": "تسجيل الدخول"
+    },
+    "backoffice": {
+        "appTitle": "المكتب الخلفي",
+        "appSubtitle": "إدارة المنصة",
+        "nav": {
+            "dashboard": "لوحة التحكم",
+            "dashboardDesc": "نظرة عامة وإحصائيات",
+            "sectionManagement": "الإدارة",
+            "tenants": "المؤسسات",
+            "tenantsDesc": "إدارة المؤسسات",
+            "modules": "الوحدات",
+            "modulesDesc": "تفعيل وتكوين الوحدات",
+            "plans": "الخطط",
+            "plansDesc": "خطط الاشتراك",
+            "users": "المستخدمين",
+            "usersDesc": "إدارة مستخدمي المنصة",
+            "sectionOperations": "العمليات",
+            "billing": "الفوترة",
+            "billingDesc": "الفوترة والمدفوعات",
+            "audit": "سجل التدقيق",
+            "auditDesc": "إجراءات النظام والمستخدمين",
+            "governance": "الحوكمة",
+            "governanceDesc": "السياسات والامتثال",
+            "settings": "الإعدادات",
+            "settingsDesc": "إعدادات المنصة"
+        },
+        "dashboard": {
+            "tenantsCount": "المؤسسات",
+            "activeUsers": "المستخدمين النشطين",
+            "modulesCount": "الوحدات النشطة"
+        }
+    },
+    "dashboard": {
+        "appTitle": "لوحة التحكم",
+        "appSubtitle": "إدارة المؤسسة",
+        "nav": {
+            "dashboard": "لوحة التحكم",
+            "dashboardDesc": "نظرة عامة",
+            "sectionDomain": "المجال",
+            "objects": "الكائنات",
+            "objectsDesc": "إدارة كائنات الإيجار",
+            "bookings": "الحجوزات",
+            "bookingsDesc": "الحجوزات والإيجارات",
+            "sectionTenant": "المؤسسة",
+            "users": "المستخدمين",
+            "usersDesc": "إدارة المستخدمين",
+            "settings": "الإعدادات",
+            "settingsDesc": "إعدادات المؤسسة"
+        },
+        "stats": {
+            "objects": "الكائنات",
+            "bookings": "الحجوزات",
+            "users": "المستخدمين"
+        }
+    },
+    "web": {
+        "hero": {
+            "title": "مرحباً بك في XalaBaaS",
+            "subtitle": "اكتشف واحجز كائنات الإيجار بسهولة وسرعة",
+            "browseObjects": "تصفح الكائنات",
+            "objectsDesc": "عرض جميع كائنات الإيجار المتاحة"
+        },
+        "search": {
+            "title": "البحث عن الكائنات",
+            "subtitle": "ابحث واحجز كائنات الإيجار",
+            "viewDetails": "عرض التفاصيل",
+            "empty": "لم يتم العثور على كائنات"
+        },
+        "login": {
+            "title": "تسجيل الدخول",
+            "subtitle": "مرحباً بك في XalaBaaS",
+            "description": "سجّل دخولك لعرض حجوزاتك وإدارة حسابك.",
+            "signInPrompt": "تسجيل الدخول إلى حسابك",
+            "continueWithEmail": "المتابعة بالبريد الإلكتروني",
+            "google": "المتابعة مع جوجل",
+            "demo": "تسجيل دخول تجريبي",
+            "demoHint": "استخدم تسجيل الدخول التجريبي لاختبار الخدمة بدون حساب.",
+            "or": "أو",
+            "error": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى."
+        },
+        "account": {
+            "title": "حسابي",
+            "subtitle": "عرض حجوزاتك وإعدادات الحساب"
+        },
+        "object": {
+            "booking": "احجز هذا الكائن",
+            "notFound": "الكائن غير موجود",
+            "noDescription": "لا يوجد وصف"
+        },
+        "payment": {
+            "processing": "جاري معالجة الدفع...",
+            "success": "تم الدفع بنجاح!",
+            "successMessage": "تم تأكيد دفعتك. سيتم إعادة توجيهك قريباً.",
+            "failed": "فشل الدفع",
+            "failedMessage": "حدث خطأ في الدفع. يرجى المحاولة مرة أخرى."
+        },
+        "privacy": {
+            "title": "إعدادات الخصوصية",
+            "cookies": "ملفات تعريف الارتباط",
+            "analytics": "التحليلات",
+            "analyticsDesc": "تساعدنا في تحسين الخدمة",
+            "marketing": "التسويق",
+            "marketingDesc": "محتوى وإعلانات مخصصة",
+            "saved": "تم حفظ الإعدادات."
+        },
+        "consent": {
+            "title": "نستخدم ملفات تعريف الارتباط",
+            "message": "نستخدم ملفات تعريف الارتباط لتحسين الخدمة. يمكنك تغيير إعداداتك في أي وقت.",
+            "accept": "قبول",
+            "decline": "رفض"
+        },
+        "nav": {
+            "home": "الرئيسية",
+            "objects": "الكائنات",
+            "privacy": "الخصوصية"
+        },
+        "resources": {
+            "title": "الموارد",
+            "empty": "لا توجد موارد متاحة",
+            "results": "نتائج",
+            "showMore": "عرض المزيد",
+            "remaining": "متبقية",
+            "capacity": "السعة",
+            "category": {
+                "boat": "قارب",
+                "cabin": "كوخ",
+                "equipment": "معدات",
+                "facility": "مرفق",
+                "vehicle": "مركبة",
+                "other": "أخرى"
+            },
+            "price": {
+                "perHour": "/الساعة",
+                "perDay": "/اليوم"
+            },
+            "filter": {
+                "title": "تصفية",
+                "showResults": "عرض النتائج",
+                "clearAll": "مسح الكل",
+                "category": "الفئة",
+                "category.all": "جميع الفئات",
+                "area": "المنطقة",
+                "area.all": "جميع المناطق",
+                "capacity": "السعة",
+                "capacity.all": "الكل",
+                "capacity.1to5": "١-٥",
+                "capacity.6to10": "٦-١٠",
+                "capacity.11to20": "١١-٢٠",
+                "capacity.21to50": "٢١-٥٠",
+                "capacity.50plus": "+٥٠",
+                "amenities": "المرافق"
+            },
+            "search": {
+                "placeholder": "البحث عن الموارد..."
+            },
+            "view": {
+                "grid": "شبكة",
+                "list": "قائمة",
+                "map": "خريطة",
+                "table": "جدول"
+            },
+            "table": {
+                "name": "الاسم",
+                "category": "الفئة",
+                "location": "الموقع",
+                "capacity": "السعة",
+                "price": "السعر",
+                "status": "الحالة"
+            },
+            "map": {
+                "noToken": "الخريطة غير متاحة",
+                "noLocations": "لا توجد موارد بموقع",
+                "viewDetails": "عرض التفاصيل"
+            }
+        },
+        "resource": {
+            "tab": {
+                "overview": "نظرة عامة",
+                "rules": "القواعد"
+            },
+            "description": "الوصف",
+            "keyFacts": "حقائق رئيسية",
+            "amenities": "المرافق",
+            "booking": {
+                "title": "احجز هذا المورد"
+            },
+            "location": "الموقع",
+            "map": "خريطة",
+            "contact": "اتصل",
+            "contact.info": "ستظهر معلومات الاتصال هنا عندما تكون متاحة.",
+            "rules": {
+                "empty": "لم يتم تحديد قواعد خاصة لهذا المورد."
+            },
+            "favorite": "مفضلة",
+            "unfavorite": "إزالة من المفضلة",
+            "share": "مشاركة"
+        },
+        "booking": {
+            "title": "حجز",
+            "step": {
+                "calendar": "اختر الوقت",
+                "details": "التفاصيل",
+                "confirm": "تأكيد",
+                "success": "تم"
+            },
+            "available": "متاح",
+            "unavailable": "مشغول",
+            "today": "اليوم",
+            "name": "الاسم",
+            "email": "البريد الإلكتروني",
+            "phone": "الهاتف",
+            "purpose": "الغرض",
+            "notes": "ملاحظات",
+            "summary": "ملخص",
+            "resource": "المورد",
+            "slots": "الأوقات",
+            "slotsSelected": "محدد",
+            "loginRequired": "يجب تسجيل الدخول لإتمام الحجز.",
+            "confirmBooking": "تأكيد الحجز",
+            "error": "فشل الحجز",
+            "priceSummary": "ملخص السعر",
+            "backToResource": "العودة إلى المورد",
+            "browseMore": "تصفح المزيد من الموارد",
+            "success": {
+                "title": "تم تأكيد الحجز!",
+                "message": "تم تسجيل حجزك. ستتلقى تأكيداً عبر البريد الإلكتروني.",
+                "reference": "رقم المرجع"
+            }
+        }
+    },
+    "pages": {
+        "login": {
+            "title": "تسجيل الدخول",
+            "subtitle": "مرحباً بك في Digilist",
+            "description": "سجّل دخولك لعرض حجوزاتك وإدارة حسابك."
+        },
+        "privacy": {
+            "title": "إعدادات الخصوصية",
+            "cookies": "ملفات تعريف الارتباط",
+            "analytics": "التحليلات",
+            "analyticsDesc": "تساعدنا في تحسين الخدمة",
+            "marketing": "التسويق",
+            "marketingDesc": "محتوى وإعلانات مخصصة"
+        },
+        "payment": {
+            "processing": "جاري معالجة الدفع...",
+            "success": "تم الدفع بنجاح!",
+            "successMessage": "تم تأكيد دفعتك. سيتم إعادة توجيهك قريباً.",
+            "failed": "فشل الدفع",
+            "failedMessage": "حدث خطأ في الدفع. يرجى المحاولة مرة أخرى."
+        }
+    },
+    "monitoring": {
+        "appTitle": "المراقبة",
+        "appSubtitle": "لوحة العمليات",
+        "nav": {
+            "health": "الصحة",
+            "healthDesc": "حالة النظام",
+            "sectionObservability": "المراقبة",
+            "metrics": "المقاييس",
+            "metricsDesc": "إحصائيات الاستخدام",
+            "outbox": "صندوق الصادر",
+            "outboxDesc": "قائمة الرسائل",
+            "errors": "الأخطاء",
+            "errorsDesc": "تتبع الأخطاء"
+        },
+        "status": {
+            "healthy": "سليم",
+            "degraded": "متدهور",
+            "unhealthy": "غير سليم"
+        }
+    }
+}

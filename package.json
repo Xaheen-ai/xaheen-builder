@@ -177,6 +177,7 @@
     "fast-glob": "^3.3.2",
     "html-to-image": "^1.11.13",
     "http-proxy": "^1.18.1",
+    "jose": "^5.9.6",
     "jsdom": "^26.0.0",
     "knip": "^5.46.5",
     "postcss": "^8.5.3",

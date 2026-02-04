@@ -1,0 +1,942 @@
+/**
+ * Xala Navy Theme Extensions
+ *
+ * A clean navy blue theme with slate/blue-gray accents.
+ * Primary: #003057 (Navy Blue)
+ * Based on digilist-extensions.css structure.
+ *
+ * @layer ds.app - Loaded after ds.theme layers
+ */
+
+@layer ds.app {
+
+  /* ==========================================================================
+   * SPACING TOKEN ALIASES
+   * ========================================================================== */
+
+  :root, [data-size] {
+    --ds-spacing-0: var(--ds-size-0);
+    --ds-spacing-1: var(--ds-size-1);
+    --ds-spacing-2: var(--ds-size-2);
+    --ds-spacing-3: var(--ds-size-3);
+    --ds-spacing-4: var(--ds-size-4);
+    --ds-spacing-5: var(--ds-size-5);
+    --ds-spacing-6: var(--ds-size-6);
+    --ds-spacing-7: var(--ds-size-7);
+    --ds-spacing-8: var(--ds-size-8);
+    --ds-spacing-9: var(--ds-size-9);
+    --ds-spacing-10: var(--ds-size-10);
+    --ds-spacing-11: var(--ds-size-11);
+    --ds-spacing-12: var(--ds-size-12);
+    --ds-spacing-13: var(--ds-size-13);
+    --ds-spacing-14: var(--ds-size-14);
+    --ds-spacing-15: var(--ds-size-15);
+    --ds-spacing-16: var(--ds-size-18);
+    --ds-spacing-18: var(--ds-size-18);
+    --ds-spacing-20: var(--ds-size-22);
+    --ds-spacing-22: var(--ds-size-22);
+    --ds-spacing-24: var(--ds-size-26);
+    --ds-spacing-26: var(--ds-size-26);
+    --ds-spacing-28: var(--ds-size-30);
+    --ds-spacing-30: var(--ds-size-30);
+
+    --ds-font-size-xs: var(--ds-font-size-1);
+    --ds-font-size-sm: var(--ds-font-size-2);
+    --ds-font-size-md: var(--ds-font-size-3);
+    --ds-font-size-lg: var(--ds-font-size-4);
+    --ds-font-size-xl: var(--ds-font-size-5);
+    --ds-font-size-2xl: var(--ds-font-size-6);
+    --ds-font-size-3xl: var(--ds-font-size-7);
+    --ds-font-size-4xl: var(--ds-font-size-8);
+    --ds-font-size-5xl: var(--ds-font-size-9);
+    --ds-font-size-6xl: var(--ds-font-size-10);
+
+    --ds-font-weight-bold: 700;
+    --ds-font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  }
+
+  /* ==========================================================================
+   * XALA NAVY THEME - LIGHT MODE
+   * Primary: #003057 (Navy Blue)
+   * Ring/Focus: #1e40af (Blue)
+   * ========================================================================== */
+
+  :root, [data-color-scheme="light"] {
+    /* Tailwind-style variables for compatibility */
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --primary: #003057;
+    --primary-foreground: #ffffff;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #f1f5f9;
+    --accent-foreground: #0f172a;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #1e40af;
+
+    /* Chart colors */
+    --chart-1: #2563eb;
+    --chart-2: #9333ea;
+    --chart-3: #0d9488;
+    --chart-4: #ea580c;
+    --chart-5: #dc2626;
+
+    /* Sidebar */
+    --sidebar: #f8fafc;
+    --sidebar-foreground: #64748b;
+    --sidebar-primary: #1e40af;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #e2e8f0;
+    --sidebar-accent-foreground: #0f172a;
+    --sidebar-border: #e2e8f0;
+    --sidebar-ring: #1e40af;
+
+    /* Typography */
+    --font-sans: Inter, sans-serif;
+    --font-serif: Georgia, serif;
+    --font-mono: JetBrains Mono, monospace;
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Shadows */
+    --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow-md: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 2px 4px -1px hsl(0 0% 0% / 0.10);
+    --shadow-lg: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 4px 6px -1px hsl(0 0% 0% / 0.10);
+    --shadow-xl: 0px 2px 4px 0px hsl(0 0% 0% / 0.10), 0px 8px 10px -1px hsl(0 0% 0% / 0.10);
+    --shadow-2xl: 0px 2px 4px 0px hsl(0 0% 0% / 0.25);
+
+    /* Tracking */
+    --tracking-normal: 0.0125rem;
+
+    /* Spacing base */
+    --spacing: 0.25rem;
+
+    /* Surface colors */
+    --ds-color-neutral-surface-subtle: #f8fafc;
+    --ds-color-neutral-surface-hover: #f1f5f9;
+
+    /* Accent (Primary Navy) - WCAG AAA Compliant */
+    --ds-color-accent-base-default: #003057;
+    --ds-color-accent-base-hover: #002244;
+    --ds-color-accent-base-active: #001a33;
+    --ds-color-accent-text-default: #0f172a;
+    --ds-color-accent-text-subtle: #003057;
+    --ds-color-accent-border-default: #1e40af;
+    --ds-color-accent-border-strong: #003057;
+    --ds-color-accent-border-subtle: #93c5fd;
+    --ds-color-accent-base-contrast-default: #ffffff;
+    --ds-color-accent-base-contrast-subtle: #e0f2fe;
+    --ds-color-accent-contrast-default: #ffffff;
+
+    /* Neutral (Slate) */
+    --ds-color-neutral-base-default: #0f172a;
+    --ds-color-neutral-base-hover: #1e293b;
+    --ds-color-neutral-base-active: #334155;
+    --ds-color-neutral-text-default: #0f172a;
+    --ds-color-neutral-text-subtle: #64748b;
+    --ds-color-neutral-border-default: #e2e8f0;
+    --ds-color-neutral-border-strong: #cbd5e1;
+    --ds-color-neutral-border-subtle: #f1f5f9;
+    --ds-color-neutral-base-contrast-default: #ffffff;
+    --ds-color-neutral-base-contrast-subtle: #f8fafc;
+
+    /* Success (Teal/Green) */
+    --ds-color-success-base-default: #0d9488;
+    --ds-color-success-base-hover: #0f766e;
+    --ds-color-success-base-active: #115e59;
+    --ds-color-success-text-default: #134e4a;
+    --ds-color-success-text-subtle: #0d9488;
+    --ds-color-success-border-default: #14b8a6;
+    --ds-color-success-border-strong: #0d9488;
+    --ds-color-success-border-subtle: #5eead4;
+    --ds-color-success-base-contrast-default: #ffffff;
+    --ds-color-success-base-contrast-subtle: #ccfbf1;
+
+    /* Warning (Orange) */
+    --ds-color-warning-base-default: #ea580c;
+    --ds-color-warning-base-hover: #c2410c;
+    --ds-color-warning-base-active: #9a3412;
+    --ds-color-warning-text-default: #7c2d12;
+    --ds-color-warning-text-subtle: #ea580c;
+    --ds-color-warning-border-default: #f97316;
+    --ds-color-warning-border-strong: #ea580c;
+    --ds-color-warning-border-subtle: #fdba74;
+    --ds-color-warning-base-contrast-default: #ffffff;
+    --ds-color-warning-base-contrast-subtle: #ffedd5;
+
+    /* Danger (Red) */
+    --ds-color-danger-base-default: #dc2626;
+    --ds-color-danger-base-hover: #b91c1c;
+    --ds-color-danger-base-active: #991b1b;
+    --ds-color-danger-text-default: #7f1d1d;
+    --ds-color-danger-text-subtle: #dc2626;
+    --ds-color-danger-border-default: #ef4444;
+    --ds-color-danger-border-strong: #dc2626;
+    --ds-color-danger-border-subtle: #fca5a5;
+    --ds-color-danger-base-contrast-default: #ffffff;
+    --ds-color-danger-base-contrast-subtle: #fee2e2;
+
+    /* Info (Blue) */
+    --ds-color-info-base-default: #2563eb;
+    --ds-color-info-base-hover: #1d4ed8;
+    --ds-color-info-base-active: #1e40af;
+    --ds-color-info-text-default: #1e3a8a;
+    --ds-color-info-text-subtle: #2563eb;
+    --ds-color-info-border-default: #3b82f6;
+    --ds-color-info-border-strong: #2563eb;
+    --ds-color-info-border-subtle: #93c5fd;
+    --ds-color-info-base-contrast-default: #ffffff;
+    --ds-color-info-base-contrast-subtle: #dbeafe;
+
+    /* Brand colors (using chart palette) */
+    --ds-color-brand1-base-default: #2563eb;
+    --ds-color-brand1-base-hover: #1d4ed8;
+    --ds-color-brand1-base-active: #1e40af;
+    --ds-color-brand1-text-default: #1e3a8a;
+    --ds-color-brand1-base-contrast-default: #ffffff;
+
+    --ds-color-brand2-base-default: #9333ea;
+    --ds-color-brand2-base-hover: #7e22ce;
+    --ds-color-brand2-base-active: #6b21a8;
+    --ds-color-brand2-text-default: #581c87;
+    --ds-color-brand2-base-contrast-default: #ffffff;
+
+    --ds-color-brand3-base-default: #ea580c;
+    --ds-color-brand3-base-hover: #c2410c;
+    --ds-color-brand3-base-active: #9a3412;
+    --ds-color-brand3-text-default: #7c2d12;
+    --ds-color-brand3-base-contrast-default: #ffffff;
+  }
+
+  /* ==========================================================================
+   * XALA NAVY THEME - DARK MODE
+   * ========================================================================== */
+
+  [data-color-scheme="dark"] {
+    --background: #020817;
+    --foreground: #f8fafc;
+    --card: #0a1121;
+    --card-foreground: #f8fafc;
+    --popover: #0a1121;
+    --popover-foreground: #f8fafc;
+    --primary: #003057;
+    --primary-foreground: #ffffff;
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #1e293b;
+    --accent-foreground: #f8fafc;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #f8fafc;
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: #3b82f6;
+
+    --chart-1: #3b82f6;
+    --chart-2: #a855f7;
+    --chart-3: #14b8a6;
+    --chart-4: #f97316;
+    --chart-5: #ef4444;
+
+    --sidebar: #0a1121;
+    --sidebar-foreground: #94a3b8;
+    --sidebar-primary: #3b82f6;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #1e293b;
+    --sidebar-accent-foreground: #f8fafc;
+    --sidebar-border: #1e293b;
+    --sidebar-ring: #3b82f6;
+
+    /* Surface colors */
+    --ds-color-neutral-surface-subtle: rgba(255, 255, 255, 0.04);
+    --ds-color-neutral-surface-hover: rgba(255, 255, 255, 0.08);
+
+    /* Accent - lighter for dark mode */
+    --ds-color-accent-base-default: #3b82f6;
+    --ds-color-accent-base-hover: #60a5fa;
+    --ds-color-accent-base-active: #93c5fd;
+    --ds-color-accent-text-default: #bfdbfe;
+    --ds-color-accent-text-subtle: #60a5fa;
+    --ds-color-accent-border-default: #3b82f6;
+    --ds-color-accent-border-strong: #60a5fa;
+    --ds-color-accent-border-subtle: #1e40af;
+    --ds-color-accent-base-contrast-default: #0f172a;
+    --ds-color-accent-base-contrast-subtle: #1e3a8a;
+
+    /* Neutral */
+    --ds-color-neutral-base-default: #1e293b;
+    --ds-color-neutral-base-hover: #334155;
+    --ds-color-neutral-base-active: #475569;
+    --ds-color-neutral-text-default: #f8fafc;
+    --ds-color-neutral-text-subtle: #94a3b8;
+    --ds-color-neutral-border-default: #334155;
+    --ds-color-neutral-border-strong: #475569;
+    --ds-color-neutral-border-subtle: #1e293b;
+    --ds-color-neutral-base-contrast-default: #0f172a;
+
+    /* Success */
+    --ds-color-success-base-default: #14b8a6;
+    --ds-color-success-base-hover: #2dd4bf;
+    --ds-color-success-base-active: #5eead4;
+    --ds-color-success-text-default: #99f6e4;
+    --ds-color-success-base-contrast-default: #134e4a;
+
+    /* Warning */
+    --ds-color-warning-base-default: #f97316;
+    --ds-color-warning-base-hover: #fb923c;
+    --ds-color-warning-base-active: #fdba74;
+    --ds-color-warning-text-default: #fed7aa;
+    --ds-color-warning-base-contrast-default: #7c2d12;
+
+    /* Danger */
+    --ds-color-danger-base-default: #ef4444;
+    --ds-color-danger-base-hover: #f87171;
+    --ds-color-danger-base-active: #fca5a5;
+    --ds-color-danger-text-default: #fecaca;
+    --ds-color-danger-base-contrast-default: #7f1d1d;
+
+    /* Info */
+    --ds-color-info-base-default: #3b82f6;
+    --ds-color-info-base-hover: #60a5fa;
+    --ds-color-info-base-active: #93c5fd;
+    --ds-color-info-text-default: #bfdbfe;
+    --ds-color-info-base-contrast-default: #1e3a8a;
+
+    /* Brand colors */
+    --ds-color-brand1-base-default: #3b82f6;
+    --ds-color-brand1-base-hover: #60a5fa;
+    --ds-color-brand1-text-default: #bfdbfe;
+    --ds-color-brand1-base-contrast-default: #1e3a8a;
+
+    --ds-color-brand2-base-default: #a855f7;
+    --ds-color-brand2-base-hover: #c084fc;
+    --ds-color-brand2-text-default: #e9d5ff;
+    --ds-color-brand2-base-contrast-default: #581c87;
+
+    --ds-color-brand3-base-default: #f97316;
+    --ds-color-brand3-base-hover: #fb923c;
+    --ds-color-brand3-text-default: #fed7aa;
+    --ds-color-brand3-base-contrast-default: #7c2d12;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-scheme="auto"] {
+      --background: #020817;
+      --foreground: #f8fafc;
+      --card: #0a1121;
+      --card-foreground: #f8fafc;
+      --popover: #0a1121;
+      --popover-foreground: #f8fafc;
+      --primary: #003057;
+      --primary-foreground: #ffffff;
+      --secondary: #1e293b;
+      --secondary-foreground: #f8fafc;
+      --muted: #1e293b;
+      --muted-foreground: #94a3b8;
+      --accent: #1e293b;
+      --accent-foreground: #f8fafc;
+      --destructive: #7f1d1d;
+      --destructive-foreground: #f8fafc;
+      --border: #1e293b;
+      --input: #1e293b;
+      --ring: #3b82f6;
+
+      --chart-1: #3b82f6;
+      --chart-2: #a855f7;
+      --chart-3: #14b8a6;
+      --chart-4: #f97316;
+      --chart-5: #ef4444;
+
+      --sidebar: #0a1121;
+      --sidebar-foreground: #94a3b8;
+      --sidebar-primary: #3b82f6;
+      --sidebar-primary-foreground: #ffffff;
+      --sidebar-accent: #1e293b;
+      --sidebar-accent-foreground: #f8fafc;
+      --sidebar-border: #1e293b;
+      --sidebar-ring: #3b82f6;
+
+      --ds-color-neutral-surface-subtle: rgba(255, 255, 255, 0.04);
+      --ds-color-neutral-surface-hover: rgba(255, 255, 255, 0.08);
+
+      --ds-color-accent-base-default: #3b82f6;
+      --ds-color-accent-base-hover: #60a5fa;
+      --ds-color-accent-base-active: #93c5fd;
+      --ds-color-accent-text-default: #bfdbfe;
+      --ds-color-accent-base-contrast-default: #0f172a;
+
+      --ds-color-neutral-base-default: #1e293b;
+      --ds-color-neutral-text-default: #f8fafc;
+      --ds-color-neutral-text-subtle: #94a3b8;
+      --ds-color-neutral-border-default: #334155;
+
+      --ds-color-success-base-default: #14b8a6;
+      --ds-color-success-text-default: #99f6e4;
+      --ds-color-warning-base-default: #f97316;
+      --ds-color-warning-text-default: #fed7aa;
+      --ds-color-danger-base-default: #ef4444;
+      --ds-color-danger-text-default: #fecaca;
+      --ds-color-info-base-default: #3b82f6;
+      --ds-color-info-text-default: #bfdbfe;
+    }
+  }
+
+  /* ==========================================================================
+   * BUTTON BORDER RADIUS
+   * ========================================================================== */
+
+  .ds-button {
+    border-radius: calc(var(--ds-border-radius-md) + 5px);
+  }
+
+  .ds-toggle-group .ds-button,
+  .ds-togglegroup .ds-button,
+  [class*="toggle-group"] .ds-button {
+    border-radius: var(--ds-border-radius-md) !important;
+  }
+
+  /* ==========================================================================
+   * SIDEBAR COMPONENT TOKENS
+   * ========================================================================== */
+
+  :root, [data-color-scheme="light"] {
+    --digilist-sidebar-background: var(--sidebar);
+    --digilist-sidebar-foreground: var(--sidebar-foreground);
+    --digilist-sidebar-primary: var(--sidebar-primary);
+    --digilist-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --digilist-sidebar-accent: var(--sidebar-accent);
+    --digilist-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --digilist-sidebar-border: var(--sidebar-border);
+    --digilist-sidebar-ring: var(--sidebar-ring);
+  }
+
+  [data-color-scheme="dark"] {
+    --digilist-sidebar-background: var(--sidebar);
+    --digilist-sidebar-foreground: var(--sidebar-foreground);
+    --digilist-sidebar-primary: var(--sidebar-primary);
+    --digilist-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --digilist-sidebar-accent: var(--sidebar-accent);
+    --digilist-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --digilist-sidebar-border: var(--sidebar-border);
+    --digilist-sidebar-ring: var(--sidebar-ring);
+  }
+
+  /* ==========================================================================
+   * CHART COLORS
+   * ========================================================================== */
+
+  :root, [data-color-scheme="light"] {
+    --digilist-chart-1: var(--chart-1);
+    --digilist-chart-2: var(--chart-2);
+    --digilist-chart-3: var(--chart-3);
+    --digilist-chart-4: var(--chart-4);
+    --digilist-chart-5: var(--chart-5);
+  }
+
+  [data-color-scheme="dark"] {
+    --digilist-chart-1: var(--chart-1);
+    --digilist-chart-2: var(--chart-2);
+    --digilist-chart-3: var(--chart-3);
+    --digilist-chart-4: var(--chart-4);
+    --digilist-chart-5: var(--chart-5);
+  }
+
+  /* ==========================================================================
+   * FORM CONTROL HEIGHTS
+   * ========================================================================== */
+
+  :root {
+    --digilist-control-height-sm: 2.5rem;
+    --digilist-control-height-md: 2.875rem;
+    --digilist-control-height-lg: 3.25rem;
+  }
+
+  /* ==========================================================================
+   * LINE HEIGHT & LETTER SPACING TOKENS
+   * ========================================================================== */
+
+  :root {
+    --ds-line-height-condensed: 1.1;
+    --ds-letter-spacing-normal: 0;
+    --ds-letter-spacing-tight: -0.025em;
+    --ds-letter-spacing-wide: 0.025em;
+    --ds-letter-spacing-wider: 0.05em;
+    --ds-letter-spacing-widest: 0.1em;
+    --ds-letter-spacing-badge: 0.5px;
+  }
+
+  /* ==========================================================================
+   * BORDER WIDTH TOKENS
+   * ========================================================================== */
+
+  :root {
+    --ds-border-width-default: 1px;
+    --ds-border-width-thin: 1px;
+    --ds-border-width-medium: 2px;
+    --ds-border-width-thick: 3px;
+  }
+
+  /* ==========================================================================
+   * COMPONENT SIZE TOKENS
+   * ========================================================================== */
+
+  :root {
+    --digilist-size-search-max-width: 520px;
+    --digilist-size-search-min-width: 80px;
+    --digilist-size-container-max: 1440px;
+  }
+
+  /* ==========================================================================
+   * BREAKPOINT TOKENS
+   * ========================================================================== */
+
+  :root {
+    --digilist-breakpoint-mobile: 599px;
+    --digilist-breakpoint-tablet: 600px;
+    --digilist-breakpoint-desktop: 992px;
+  }
+
+  /* ==========================================================================
+   * LOGIN PAGE TOKENS
+   * ========================================================================== */
+
+  :root {
+    --digilist-login-overlay-gradient: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.4) 50%,
+      rgba(0, 0, 0, 0.25) 100%
+    );
+    --digilist-login-overlay-text: rgba(255, 255, 255, 1);
+    --digilist-login-overlay-text-muted: rgba(255, 255, 255, 0.85);
+    --digilist-login-overlay-bullet: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ==========================================================================
+   * ANIMATION TIMING TOKENS
+   * ========================================================================== */
+
+  :root {
+    --digilist-animation-duration-fast: 150ms;
+    --digilist-animation-duration-normal: 300ms;
+    --digilist-animation-duration-slow: 500ms;
+    --digilist-animation-duration-slower: 700ms;
+
+    --digilist-animation-delay-fast: 100ms;
+    --digilist-animation-delay-normal: 200ms;
+    --digilist-animation-delay-slow: 400ms;
+    --digilist-animation-delay-slower: 600ms;
+    --digilist-animation-delay-slowest: 800ms;
+  }
+
+  /* ==========================================================================
+   * DECORATIVE EFFECT SIZING
+   * ========================================================================== */
+
+  :root {
+    --digilist-size-orb-large: 32rem;
+    --digilist-size-orb-medium: 24rem;
+    --digilist-size-orb-small: 16rem;
+    --digilist-size-blur-large: 100px;
+    --digilist-size-blur-medium: 60px;
+    --digilist-size-blur-small: 30px;
+  }
+
+  /* ==========================================================================
+   * EXTENDED SEMANTIC SHADOWS
+   * ========================================================================== */
+
+  :root, [data-color-scheme="light"] {
+    --ds-shadow-header: var(--shadow-sm);
+    --ds-shadow-dropdown: var(--shadow-lg);
+    --ds-shadow-card: var(--shadow);
+    --ds-shadow-card-hover: var(--shadow-xl);
+    --ds-shadow-focus-ring: 0 0 0 3px var(--ring);
+    --ds-shadow-badge: var(--shadow-2xs);
+  }
+
+  [data-color-scheme="dark"] {
+    --ds-shadow-header: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --ds-shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+    --ds-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --ds-shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+    --ds-shadow-badge: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ==========================================================================
+   * LISTING DETAIL PAGE TOKENS
+   * ========================================================================== */
+
+  :root {
+    --digilist-gallery-hero-ratio: 7fr;
+    --digilist-gallery-thumb-ratio: 3fr;
+    --digilist-gallery-thumb-height: 120px;
+    --digilist-gallery-counter-bg: rgba(0, 0, 0, 0.6);
+    --digilist-gallery-gap: var(--ds-spacing-3);
+
+    --digilist-calendar-cell-available: var(--ds-color-success-surface-default);
+    --digilist-calendar-cell-occupied: var(--ds-color-danger-surface-default);
+    --digilist-calendar-cell-selected: var(--ds-color-accent-surface-default);
+    --digilist-calendar-cell-unavailable: var(--ds-color-neutral-surface-hover);
+
+    --digilist-calendar-cell-height: 48px;
+    --digilist-calendar-time-column-width: 60px;
+    --digilist-calendar-day-header-height: 56px;
+
+    --digilist-calendar-text-available: var(--ds-color-success-text-default);
+    --digilist-calendar-text-occupied: var(--ds-color-danger-text-default);
+    --digilist-calendar-text-selected: var(--ds-color-accent-text-default);
+
+    --digilist-stepper-circle-size: 32px;
+    --digilist-stepper-line-height: 2px;
+
+    --digilist-detail-sidebar-width: 320px;
+    --digilist-detail-content-gap: var(--ds-spacing-6);
+  }
+
+  [data-color-scheme="dark"] {
+    --digilist-gallery-counter-bg: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* ==========================================================================
+ * TAILWIND-STYLE @theme INLINE MAPPING
+ * Maps CSS variables to Tailwind-compatible color utilities
+ * ========================================================================== */
+
+@layer ds.app {
+  :root {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+
+    --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+    --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+    --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+    --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+    --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+  }
+}
+
+/* ==========================================================================
+ * RESPONSIVE UTILITIES
+ * ========================================================================== */
+
+.ds-grid-responsive {
+  --_grid-columns: var(--_grid-sm, 1);
+}
+
+@container ds-container (min-width: 600px) {
+  .ds-grid-responsive {
+    --_grid-columns: var(--_grid-md, 2);
+  }
+}
+
+@container ds-container (min-width: 900px) {
+  .ds-grid-responsive {
+    --_grid-columns: var(--_grid-lg, 3);
+  }
+}
+
+@media (min-width: 640px) {
+  .ds-grid-responsive {
+    --_grid-columns: var(--_grid-md, 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-grid-responsive {
+    --_grid-columns: var(--_grid-lg, 3);
+  }
+}
+
+/* ==========================================================================
+ * LISTING GRID RESPONSIVE STYLES
+ * Enforces max 3 columns on desktop, 2 on tablet, 1 on mobile
+ * ========================================================================== */
+
+@layer ds.app {
+  /* Desktop: max 3 columns */
+  @media (min-width: 992px) {
+    .listing-grid[data-max-columns="3"] {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+    .listing-grid[data-max-columns="2"] {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .listing-grid[data-max-columns="1"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* Tablet: max 2 columns */
+  @media (min-width: 600px) and (max-width: 991px) {
+    .listing-grid[data-max-columns="3"],
+    .listing-grid[data-max-columns="2"] {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .listing-grid[data-max-columns="1"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* Mobile: 1 column */
+  @media (max-width: 599px) {
+    .listing-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+}
+
+/* ==========================================================================
+ * LISTING GRID - STRICT RESPONSIVE COLUMNS
+ * 3 columns (large 1024px+), 2 columns (tablet 640-1023px), 1 column (mobile <640px)
+ * ========================================================================== */
+
+.listing-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .listing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .listing-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ==========================================================================
+ * MOBILE COMPONENT OVERRIDES
+ * ========================================================================== */
+
+@media (max-width: 700px) {
+  .listing-list-item {
+    flex-direction: column !important;
+  }
+
+  .listing-list-item > div:first-child {
+    width: 100% !important;
+    min-width: unset !important;
+    max-height: 200px;
+  }
+
+  .listing-list-item > div:last-child:not(:nth-child(2)) {
+    display: none !important;
+  }
+}
+
+@media (max-width: 599px) {
+  .main-content-layout {
+    padding-left: var(--ds-spacing-4) !important;
+    padding-right: var(--ds-spacing-4) !important;
+  }
+}
+
+/* ==========================================================================
+ * LISTING DETAIL PAGE RESPONSIVE LAYOUT
+ * ========================================================================== */
+
+.listing-detail-layout {
+  display: grid;
+  gap: var(--digilist-detail-content-gap, var(--ds-spacing-6));
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 992px) {
+  .listing-detail-layout {
+    grid-template-columns: 1fr var(--digilist-detail-sidebar-width, 320px);
+  }
+}
+
+/* ==========================================================================
+ * IMAGE GALLERY RESPONSIVE
+ * ========================================================================== */
+
+.image-gallery {
+  display: grid;
+  gap: var(--digilist-gallery-gap, var(--ds-spacing-3));
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 600px) {
+  .image-gallery {
+    grid-template-columns: var(--digilist-gallery-hero-ratio, 7fr) var(--digilist-gallery-thumb-ratio, 3fr);
+  }
+}
+
+.image-gallery-thumbnails {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ds-spacing-2);
+  overflow-x: auto;
+}
+
+@media (min-width: 600px) {
+  .image-gallery-thumbnails {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+}
+
+/* ==========================================================================
+ * AVAILABILITY CALENDAR RESPONSIVE
+ * ========================================================================== */
+
+.availability-calendar-grid {
+  display: grid;
+  grid-template-columns: var(--digilist-calendar-time-column-width, 60px) repeat(7, 1fr);
+  overflow-x: auto;
+}
+
+@media (max-width: 599px) {
+  .availability-calendar-grid {
+    min-width: 600px;
+  }
+}
+
+.availability-calendar-cell {
+  height: var(--digilist-calendar-cell-height, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ds-font-size-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+}
+
+.availability-calendar-cell[data-status="available"] {
+  background-color: var(--digilist-calendar-cell-available);
+  color: var(--digilist-calendar-text-available);
+}
+
+.availability-calendar-cell[data-status="occupied"] {
+  background-color: var(--digilist-calendar-cell-occupied);
+  color: var(--digilist-calendar-text-occupied);
+  cursor: not-allowed;
+}
+
+.availability-calendar-cell[data-status="selected"] {
+  background-color: var(--digilist-calendar-cell-selected);
+  color: var(--digilist-calendar-text-selected);
+}
+
+.availability-calendar-cell[data-status="unavailable"] {
+  background-color: var(--digilist-calendar-cell-unavailable);
+  color: var(--ds-color-neutral-text-subtle);
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+ * BOOKING STEPPER
+ * ========================================================================== */
+
+.booking-stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+.booking-stepper-step {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+.booking-stepper-circle {
+  width: var(--digilist-stepper-circle-size, 32px);
+  height: var(--digilist-stepper-circle-size, 32px);
+  border-radius: var(--ds-border-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+  border: 2px solid var(--ds-color-neutral-border-default);
+  background-color: var(--ds-color-neutral-background-default);
+  color: var(--ds-color-neutral-text-subtle);
+  transition: all 0.2s ease;
+}
+
+.booking-stepper-circle[data-state="active"] {
+  border-color: var(--ds-color-accent-base-default);
+  background-color: var(--ds-color-accent-base-default);
+  color: var(--ds-color-accent-base-contrast-default);
+}
+
+.booking-stepper-circle[data-state="completed"] {
+  border-color: var(--ds-color-success-base-default);
+  background-color: var(--ds-color-success-base-default);
+  color: var(--ds-color-success-base-contrast-default);
+}
+
+.booking-stepper-line {
+  flex: 1;
+  height: var(--digilist-stepper-line-height, 2px);
+  background-color: var(--ds-color-neutral-border-default);
+  min-width: var(--ds-spacing-4);
+}
+
+.booking-stepper-line[data-state="completed"] {
+  background-color: var(--ds-color-success-base-default);
+}
+
+/* ==========================================================================
+ * BODY LETTER SPACING
+ * ========================================================================== */
+
+body {
+  letter-spacing: var(--tracking-normal);
+}

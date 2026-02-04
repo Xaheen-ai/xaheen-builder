@@ -436,6 +436,9 @@ importers:
       http-proxy:
         specifier: ^1.18.1
         version: 1.18.1
+      jose:
+        specifier: ^5.9.6
+        version: 5.9.6
       jsdom:
         specifier: ^26.0.0
         version: 26.0.0

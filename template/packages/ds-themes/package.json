@@ -1,0 +1,27 @@
+{
+  "name": "@xaheen/ds-themes",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./themes/*": "./themes/*",
+    "./generated/*": "./generated/*"
+  },
+  "scripts": {
+    "tokens:create": "npx @digdir/designsystemet tokens create --config ../../designsystemet.config.json",
+    "tokens:build": "npx @digdir/designsystemet tokens build --tokens ./generated --out-dir ./generated",
+    "tokens:generate": "npm run tokens:create && npm run tokens:build",
+    "prebuild": "npm run tokens:generate"
+  },
+  "dependencies": {
+    "@digdir/designsystemet-theme": "^1.0.0"
+  },
+  "devDependencies": {
+    "@digdir/designsystemet": "^1.9.0",
+    "vite": "^5.4.8"
+  }
+}

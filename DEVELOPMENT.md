@@ -99,7 +99,7 @@ can use the Vercel instant rollbacks to prompt old deployments to production.
 - You'll need the following env vars set in `.env.local` (values are in 1Password under `flex .env.local`)
   - VITE_WORKOS_CLIENT_ID=client_01K0YV0SNPRYJ5AV4AS0VG7T1J
   - VITE_WORKOS_REDIRECT_URI=http://127.0.0.1:5173
-  - VITE_WORKOS_API_HOSTNAME=apiauth.convex.dev
+  - VITE_WORKOS_API_HOSTNAME=convex-api.dev
 
 (it'll also be in the default Convex project env vars, so you can sync via dashboard).
 

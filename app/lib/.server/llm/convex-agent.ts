@@ -650,7 +650,7 @@ async function storeDebugPrompt(
 
     const formData = new FormData();
     formData.append('metadata', JSON.stringify(metadata));
-    formData.append('promptCoreMessages', new Blob([compressedData]));
+    formData.append('promptCoreMessages', new Blob([compressedData.slice()]));
 
     const response = await fetch(`${getConvexSiteUrl()}/upload_debug_prompt`, {
       method: 'POST',

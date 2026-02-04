@@ -1,27 +1,76 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+*.js.map
+*.d.ts
+!src/**/*.d.ts
+
+# Environment
+.env
+.env.*
+!.env.example
+.env.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
 # Logs
-logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Test outputs
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+blob-report/
+
+# Artifacts
+artifacts/
+*.artifact
+
+# Generated
+*.generated.ts
+*.generated.sql
+
+# Secrets (never commit)
+*.pem
+*.key
+service-account*.json
+secrets/
+
+# Package lock files (keep one)
+pnpm-lock.yaml
+yarn.lock
+# package-lock.json is kept
+
+# Convex
+.convex/
+convex/_generated/
+
+# Turbo
+.turbo/
+
+# Vite
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Ignored for the template, you probably want to remove it:
-package-lock.json
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+.prettiercache
+*.tsbuildinfo

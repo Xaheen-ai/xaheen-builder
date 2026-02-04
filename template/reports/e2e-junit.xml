@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Convex E2E Tests" tests="5" failures="0" time="15.008">
+
+    <testsuite name="booking-workflow" tests="1" failures="0" time="0.927">
+        <testcase name="booking-workflow" classname="e2e" time="0.927">
+
+        </testcase>
+    </testsuite>
+    <testsuite name="admin-workflow" tests="1" failures="0" time="0.717">
+        <testcase name="admin-workflow" classname="e2e" time="0.717">
+
+        </testcase>
+    </testsuite>
+    <testsuite name="user-journeys" tests="1" failures="0" time="0.71">
+        <testcase name="user-journeys" classname="e2e" time="0.71">
+
+        </testcase>
+    </testsuite>
+    <testsuite name="edge-cases" tests="1" failures="0" time="0.686">
+        <testcase name="edge-cases" classname="e2e" time="0.686">
+
+        </testcase>
+    </testsuite>
+    <testsuite name="performance" tests="1" failures="0" time="11.968">
+        <testcase name="performance" classname="e2e" time="11.968">
+
+        </testcase>
+    </testsuite>
+</testsuites>

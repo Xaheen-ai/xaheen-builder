@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ghcr.io/get-convex/convex-backend:latest
+    ports:
+      - "127.0.0.1:3210:3210"
+      - "127.0.0.1:3211:3211"
+    volumes:
+      - convex-data:/convex/data
+    env_file:
+      - .env
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3210/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  dashboard:
+    image: ghcr.io/get-convex/convex-dashboard:latest
+    ports:
+      - "127.0.0.1:6791:6791"
+    env_file:
+      - .env
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    depends_on:
+      - backend
+
+volumes:
+  convex-data:

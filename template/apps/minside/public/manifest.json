@@ -1,0 +1,23 @@
+{
+  "name": "Min Side",
+  "short_name": "Min Side",
+  "description": "Norwegian municipal citizen portal for bookings and self-service",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "no",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

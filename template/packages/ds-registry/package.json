@@ -1,0 +1,43 @@
+{
+  "name": "@xaheen/ds-registry",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js"
+    },
+    "./registry.json": "./registry.json",
+    "./examples": {
+      "types": "./dist/examples/index.d.ts",
+      "import": "./dist/examples/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "examples",
+    "registry.json"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b --watch",
+    "validate": "node -e \"console.log(JSON.parse(require('fs').readFileSync('registry.json', 'utf8')).metadata)\""
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@xaheen/ds": "workspace:*",
+    "@xaheen/ds-themes": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.7.2"
+  }
+}

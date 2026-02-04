@@ -1,0 +1,33 @@
+{
+  "name": "@xaheen/ds",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./styles": {
+      "default": "./src/styles.ts"
+    }
+  },
+  "scripts": {
+    "build": "echo 'DS package is source-only, consumed directly by bundlers'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@digdir/designsystemet-css": "^1.0.0",
+    "@digdir/designsystemet-react": "^1.9.0",
+    "@xaheen/ds-themes": "workspace:*",
+    "mapbox-gl": "^3.17.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-map-gl": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/mapbox-gl": "^3.4.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0"
+  }
+}

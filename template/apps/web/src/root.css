@@ -1,0 +1,99 @@
+/* Minimal global styles allowed by guardrails:
+   - font-feature-settings recommended by Designsystemet
+   - CSS reset for body margins
+   - no custom component styling
+
+   IMPORTANT: Do NOT use `padding: 0` on * selector as it breaks
+   Digdir design system component padding (buttons, inputs, etc.)
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+html {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-feature-settings: "cv05" 1; /* per Designsystemet guidance */
+}
+
+/* ===================================
+   WCAG AAA ACCESSIBILITY ENHANCEMENTS
+   =================================== */
+
+/* Enhanced focus indicators (WCAG 2.4.7 Level AA)
+   Only show focus ring on keyboard navigation, not mouse clicks */
+*:focus {
+  outline: 2px solid var(--ds-color-focus-outer);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--ds-color-focus-outer);
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion preferences (WCAG 2.3.3 Level AAA) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support (WCAG 1.4.6 Level AAA) */
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline-width: 4px;
+    outline-offset: 3px;
+  }
+
+  /* Ensure borders are visible in high contrast mode */
+  button, input, select, textarea, a {
+    border: 2px solid currentColor !important;
+  }
+}
+
+/* Ensure sufficient contrast for text (WCAG 1.4.6 Level AAA - 7:1 ratio)
+   Design tokens should handle this, but enforce minimum standards */
+body {
+  color: var(--ds-color-neutral-text-default);
+  background-color: var(--ds-color-neutral-background-default);
+}
+
+/* Ensure interactive elements are distinguishable */
+a, button, [role="button"], [role="link"] {
+  cursor: pointer;
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  color: var(--ds-color-accent-base-default);
+}
+
+a:not([class]):hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Screen reader only utility class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

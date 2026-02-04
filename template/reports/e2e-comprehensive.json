@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-02-03T23:45:16.489Z",
+  "suites": [
+    [
+      "booking-workflow",
+      {
+        "status": "passed",
+        "duration": 927,
+        "attempts": 1
+      }
+    ],
+    [
+      "admin-workflow",
+      {
+        "status": "passed",
+        "duration": 717,
+        "attempts": 1
+      }
+    ],
+    [
+      "user-journeys",
+      {
+        "status": "passed",
+        "duration": 710,
+        "attempts": 1
+      }
+    ],
+    [
+      "edge-cases",
+      {
+        "status": "passed",
+        "duration": 686,
+        "attempts": 1
+      }
+    ],
+    [
+      "performance",
+      {
+        "status": "passed",
+        "duration": 11968,
+        "attempts": 1
+      }
+    ]
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "passRate": 100,
+    "totalDuration": 15008,
+    "averageDuration": 3001.6
+  },
+  "environment": {
+    "nodeVersion": "v22.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  }
+}
